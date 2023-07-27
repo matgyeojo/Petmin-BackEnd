@@ -1,5 +1,6 @@
 package org.matgyeojo.dto;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,8 @@ public class Chatroom {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer chatroomNo;	//채팅방 시퀀스
-	private String userId1;	//유저 아이디
-	private String userId2;	//유저 아이디2
+//	@Column(nullable = false)
+//	private String userId1;	//유저 아이디 fk
+//	@Column(nullable = false)
+//	private String userId2;	//유저 아이디2fk
 }
