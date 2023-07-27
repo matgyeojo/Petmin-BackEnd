@@ -22,17 +22,15 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="TEMPERATURE")
+@Table(name="PET_SUB")
 @Entity
-public class Temperature {
+public class PetSub {
 	
 	@Id
 	@GeneratedValue(strategy =GenerationType.IDENTITY)//auto 인데 테이블별로 따로
-	private int temperatureNo;//온도시퀀스
+	private int subNo;//즐겨찾기 시퀀스
 	
-	//userId 유저아이디 fk
-	
-	@Column(nullable = true)
-	private int temperatureTem;//온도
-	
+	//userID 유저 아이디 fk
+	//sitterID 펫시터아이디 fk
+
 }

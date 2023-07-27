@@ -31,15 +31,14 @@ public class Review {
 	private int reviewNo;//리뷰시퀀스
 	
 	//dolbomNo 돌봄 시퀀스 fk
-	//userId 유저아이디 fk
 	
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private int reviewTime;//리뷰시간점수
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private int reviewKind;//리뷰친절점수
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private int reviewDelecacy;//리뷰섬세점수
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private String reviewMsg;//리뷰후기
 	
 	
