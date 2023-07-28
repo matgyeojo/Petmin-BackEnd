@@ -32,5 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 
-**/src/main/resources
-**application.properties
+.metadata
+bin/
+.target
+
+/src/main/resources
+application.properties
+
