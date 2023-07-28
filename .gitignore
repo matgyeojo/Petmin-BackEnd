@@ -70,6 +70,7 @@ local.properties
 hs_err_pid*
 replay_pid*
 ### Maven ###
+/target
 target/
 pom.xml.tag
 pom.xml.releaseBackup
