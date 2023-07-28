@@ -7,9 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,16 +31,32 @@ import lombok.ToString;
 public class Chat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer chatNo; //채팅내용 시퀀스
-	//private Integer chatroomNo; //채팅방 시퀀스 FK
-//	private String startId; //보내는 사람 아이디 fk
-//	private String endId; //받는 사람 아이디 fk
+	private Integer chatNo; // 채팅내용 시퀀스
+
+	//채팅방 시퀀스 FK
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "chatroom_no")
+	private Chatroom chatroom;
+
+	// 보내는 사람 아이디 fk
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "start_id")
+	private Users startId;
+
+//받는 사람 아이디 fk
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "end_id")
+	private Users endId;
+
 	@Column(nullable = false)
-	private String chatMsg; //채팅 내용
+	private String chatMsg; // 채팅 내용
 	@Column(nullable = true)
-	private String chatImg; //채팅 이미지
+	private String chatImg; // 채팅 이미지
 	@CreationTimestamp
-	private Timestamp chatDate; //채팅 보낸 날짜
+	private Timestamp chatDate; // 채팅 보낸 날짜
 	@Column(nullable = false)
-	private Boolean chatCheck; //채팅 읽었나요
+	private Boolean chatCheck; // 채팅 읽었나요
 }

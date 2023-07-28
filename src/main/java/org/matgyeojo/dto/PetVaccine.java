@@ -5,7 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +31,11 @@ public class PetVaccine {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer vaccineNo;	//예방접종 시퀀스
 	//반려 시퀀스 FK
+	@OneToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "pet_no")
+	PetProfile petprofile;
+	
 	@Column(nullable = false)
 	private String vaccine1;	//접종상태1
 	@Column(nullable = false)
