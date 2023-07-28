@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Index {
 	@GetMapping("/test")
 	public String Nowij() {
-		System.out.println("컨트롤러 오는지");
+		System.out.println("컨트롤러 오는지zxczxc");
 		return "Spring Boot and React 연동 테스트";
 	}
 	
