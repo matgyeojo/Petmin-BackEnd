@@ -33,12 +33,14 @@ public class Dolbom {
 	@GeneratedValue(strategy =GenerationType.IDENTITY)//auto 인데 테이블별로 따로
 	private int dolbomNo;//돌콤시퀀스
 	
-	@CreationTimestamp
-	private Timestamp dolbomAsk;//돌봄신청날짜
 	@UpdateTimestamp
-	private Timestamp dolbomStart;//돌봄시작날짜
-	@UpdateTimestamp 
-	private Timestamp dolbomEnd;//돌봄끝날짜
+	private Timestamp scheduleDay;//펫시터 가능한 일
+	@UpdateTimestamp
+	private Timestamp scheduleHour;//펫시터 가능한 시간
+	@Column(nullable = true)
+	private Boolean dolbomStatus;//예약여부
+	@Column(nullable = true)
+	private String dolbomOption;//돌봄 종류
 	
 	//user_id 유저 아이디	fk 
 	//petsitter_id 펫시터 아이디 fk

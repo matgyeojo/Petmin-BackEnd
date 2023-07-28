@@ -1,11 +1,16 @@
 package org.matgyeojo.dto;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,20 +23,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="PREFERENCE")
-public class Preference {
+@Table(name="PETSITTER_PROFILE")
+
+public class PetsitterProfile {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer preferenceNo;	//선호 시퀀스
-	//유저 아이디	FK
+	private int userid;//펫싵터 시퀀스
+	
+	@MapsId
+	@OneToOne
+	@JoinColumn(name = "user_id")
+	Users users;
+	
 	@Column(nullable = false)
-	private String preference1;	//첫번째 선호
+	private String sitterHouse;//펫시터 집 이미지
 	@Column(nullable = false)
-	private String preference2;	//두번째 선호
+	private String sitterHousetype;//펫시티 거주형태
 	@Column(nullable = false)
-	private String preference3;	//세번째 선호
+	private String sitterTem;//펫시터 온도
 	@Column(nullable = false)
-	private String preference4;	//세번째 선호
-	@Column(nullable = false)
-	private String preference5;	//세번째 선호
+	private String sitterMsg;//펫시터 자기소개
+	
+
+	
 }
