@@ -1,5 +1,7 @@
 package org.matgyeojo.dto;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,10 +34,12 @@ import lombok.Setter;
 public class PetsitterProfile {
 	
 	@Id
-	private int userid;//펫싵터 시퀀스
+	@Column(name = "user_id")
+	private int userid;
 	
 	@MapsId
 	@OneToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "user_id")
 	Users users;
 	
@@ -43,7 +51,9 @@ public class PetsitterProfile {
 	private String sitterTem;//펫시터 온도
 	@Column(nullable = false)
 	private String sitterMsg;//펫시터 자기소개
-	
+	@OneToMany( mappedBy = "petsitter")
+	private List<Review> petsitter;
+
 
 	
 }

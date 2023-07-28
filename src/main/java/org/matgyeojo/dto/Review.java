@@ -1,14 +1,20 @@
 package org.matgyeojo.dto;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.SQLUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +36,13 @@ public class Review {
 	@GeneratedValue(strategy =GenerationType.IDENTITY)//auto 인데 테이블별로 따로
 	private int reviewNo;//리뷰시퀀스
 	
-	//dolbomNo 돌봄 시퀀스 fk
+	//펫시터아이디 
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "user_id")
+	private Users petsitter;
+	
+	
 	
 	@Column(nullable = false)
 	private int reviewTime;//리뷰시간점수
