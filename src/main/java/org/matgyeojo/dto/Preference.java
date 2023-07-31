@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +36,7 @@ public class Preference {
 	// FK: 킬람이 board_bnofh 로 생성된다
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "user_id")
 	private Users user;
 

@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +42,7 @@ public class PetsitterProfile {
 	@MapsId
 	@OneToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "user_id")
 	Users users;
 	
