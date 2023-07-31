@@ -15,6 +15,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,11 +39,13 @@ public class PetSub {
 	// 유저 아이디 fk
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "user_id")
 	private Users user;
 	// 펫시터아이디 fk
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "sitter_id")
 	private Users sitter;
 

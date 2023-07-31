@@ -20,6 +20,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,13 +44,22 @@ public class Dolbom {
 	//유저 아이디 fk
 	@ManyToOne
 	@JoinColumn(name="user_id")
+	@JsonIgnore
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	Users user1;
 	//펫시터 아이디 fk
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="petsitter_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	Users user2;
+	
+	//펫시퀀스
+	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	@JoinColumn(name = "pet_no")
+	private PetProfile petProfile;
 	
 	@UpdateTimestamp
 	private Timestamp scheduleDay;// 펫시터 가능한 일
@@ -61,6 +72,7 @@ public class Dolbom {
 	
 	
 	@OneToOne(mappedBy = "dolbomNo")
+	@JsonIgnore
 	private UserAssurance userAssurance;
 
 }
