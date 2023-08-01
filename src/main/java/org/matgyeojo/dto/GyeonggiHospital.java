@@ -23,25 +23,25 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "HOSPITAL")
-public class Hospital {
+public class GyeonggiHospital {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer hospitalNo; //병원 시퀀스
     @Column(name = "hospitalName")
-    private String BPLCNM; //병원 이름
+    private String BIZPLC_NM; //병원 이름
     @Column(name = "hospitalLatitude")
-    private Double X; //병원 위도
+    private Double REFINE_WGS84_LAT; //병원 위도
     @Column(name = "hospitalLongtitude")
-    private Double Y; //병원 경도
+    private Double REFINE_WGS84_LOGT; //병원 경도
     @Column(name = "hospitalAddress")
-    private String RDNWHLADDR; //병원 주소
+    private String REFINE_ROADNM_ADDR; //병원 주소
     @Column(name = "hospiralState")
-    private String TRDSTATENM; //병원 상태
+    private String BSN_STATE_NM; //병원 상태
     @Column(name = "hospitalTel")
-    private String SITETEL; //병원 전화번호 
+    private String LOCPLC_FACLT_TELNO; //병원 전화번호 
     @Column(name = "hospitalPartner")
     private Boolean hospitalPartner; //병원 보험제휴
-  
+    
  // 자동으로 랜덤 값으로 hospitalPartner를 설정하는 메서드
     public void setRandomHospitalPartner() {
         Random random = new Random();
