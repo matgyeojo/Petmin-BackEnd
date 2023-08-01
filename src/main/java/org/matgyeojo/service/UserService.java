@@ -23,9 +23,17 @@ public class UserService {
 		UsersRepo.save(dto);
 	}
 	
-	public void preferenceSave(Preference dto) {
+ 	//카드 등록
+	public Users registerCard(Users users) {
+		Users user =UsersRepo.findById(users.getUserId()).orElse(null);
+		user.setUserCard(users.getUserCard());
+		user.setUserCardpass(users.getUserCardpass());
+		UsersRepo.save(user);
+		return user;
+}
+ 	public void preferenceSave(Preference dto) {
 		Users userId = UsersRepo.findById(dto.getUser().getUserId()).get();
 		dto.setUser(userId);
 		PreferenceRepo.save(dto);
-	}
+ 	}
 }
