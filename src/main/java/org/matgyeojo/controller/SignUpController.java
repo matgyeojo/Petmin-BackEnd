@@ -22,8 +22,8 @@ public class SignUpController {
 		}
 		
 		@GetMapping("/checkDuplicateId")
-		public ResponseEntity<Boolean> checkDuplicateId(@RequestParam String usernickname) {
-			return ResponseEntity.ok(UserService.checkDuplicateId(usernickname));
+		public ResponseEntity<Boolean> checkDuplicateId(@RequestParam String userId) {
+			return ResponseEntity.ok(UserService.checkDuplicateId(userId));
 		}
 //		   @GetMapping("/auth/checkDuplicateId")
 //		   public ResponseEntity<String> checkDuplicateId(@RequestParam("memberid") String memberid) {
