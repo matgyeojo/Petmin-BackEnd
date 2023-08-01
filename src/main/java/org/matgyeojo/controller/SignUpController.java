@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignUpController {
 		@Autowired
 		UserService UserService;
-		
+
 		//회원가입 : 회원정보 Users 테이블에 저장
 		@PostMapping(value = "/signup", consumes = "application/json")
 		public void Signup(@RequestBody Users dto) {
@@ -23,12 +23,14 @@ public class SignUpController {
 			UserService.signup(dto);
 		}
 		
+
 		//아이디 중복체크
 		@GetMapping("/checkDuplicateId")
 		public ResponseEntity<Boolean> checkDuplicateId(@RequestParam String userId) {
 			return ResponseEntity.ok(UserService.checkDuplicateId(userId));
 		}
-		
+
+  
 		//회원가입 : Preference 테이블에 선호 정보 저장
 		@PostMapping(value = "/preferenceSave", consumes = "application/json")
 		public void preferenceSave(@RequestBody Preference dto ) {
@@ -36,7 +38,5 @@ public class SignUpController {
 			System.out.println(dto.getUser().getUserId());
 			UserService.preferenceSave(dto);
 		}
-		
-		
 		
 }
