@@ -30,7 +30,15 @@ public class UserService {
 		user.setUserCardpass(users.getUserCardpass());
 		UsersRepo.save(user);
 		return user;
-}
+	}
+	
+	//개인정보 수정 - 주소
+	public Users updateAddress(Users users) {
+		Users user = UsersRepo.findById(users.getUserId()).orElse(null);
+		user.setUserAddress(users.getUserAddress());
+		UsersRepo.save(user);
+		return user;
+	}
   
  	public void preferenceSave(Preference dto) {
 		Users userId = UsersRepo.findById(dto.getUser().getUserId()).get();
