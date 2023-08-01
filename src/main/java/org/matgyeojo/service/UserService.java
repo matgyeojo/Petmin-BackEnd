@@ -10,8 +10,8 @@ public class UserService {
 	@Autowired
 	UsersRepo UsersRepo;
 	
-	public boolean checkDuplicateId(String usernickname) {
-		return UsersRepo.existsByUserNickname(usernickname);
+	public boolean checkDuplicateId(String userId) {
+		return UsersRepo.existsByUserId(userId);
 	}
 	
 	public void signup(Users dto) {
