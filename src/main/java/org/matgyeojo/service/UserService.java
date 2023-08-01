@@ -31,6 +31,7 @@ public class UserService {
 		UsersRepo.save(user);
 		return user;
 }
+  
  	public void preferenceSave(Preference dto) {
 		Users userId = UsersRepo.findById(dto.getUser().getUserId()).get();
 		dto.setUser(userId);
