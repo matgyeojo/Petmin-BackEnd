@@ -17,6 +17,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,12 +41,14 @@ public class UserAssurance {
 	@MapsId
 	@OneToOne
 	@JoinColumn(name = "assurance_name")
+	@JsonIgnore
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Assurance assuranceName;
 	// 돌봄 시퀀스
 	@MapsId
 	@OneToOne
 	@JoinColumn(name = "dolbom_no")
+	@JsonIgnore
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Dolbom dolbomNo;
 

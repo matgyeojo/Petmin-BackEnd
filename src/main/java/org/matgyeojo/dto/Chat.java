@@ -15,6 +15,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,18 +38,21 @@ public class Chat {
 	//채팅방 시퀀스 FK
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "chatroom_no")
 	private Chatroom chatroom;
 
 	// 보내는 사람 아이디 fk
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "start_id")
 	private Users startId;
 
 //받는 사람 아이디 fk
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "end_id")
 	private Users endId;
 

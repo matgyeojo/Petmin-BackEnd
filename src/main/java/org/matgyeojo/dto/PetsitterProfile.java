@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +42,7 @@ public class PetsitterProfile {
 	@MapsId
 	@OneToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	@JoinColumn(name = "user_id")
 	Users users;
 	
@@ -48,7 +51,7 @@ public class PetsitterProfile {
 	@Column(nullable = false)
 	private String sitterHousetype;//펫시티 거주형태
 	@Column(nullable = false)
-	private String sitterTem;//펫시터 온도
+	private double sitterTem;//펫시터 온도
 	@Column(nullable = false)
 	private String sitterMsg;//펫시터 자기소개
 	@OneToMany( mappedBy = "petsitter")
