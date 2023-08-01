@@ -34,9 +34,7 @@ import lombok.Setter;
 public class Users {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto 인데 테이블별로 따로
-	private int userId;// 유저아이디
-
+	private String userId;// 유저 PK
 	@Column(nullable = false)
 	private String userPass; // 유저 비밀번호
 	@Column(nullable = true)
