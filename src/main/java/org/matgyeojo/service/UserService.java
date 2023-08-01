@@ -17,4 +17,13 @@ public class UserService {
 	public void signup(Users dto) {
 		UsersRepo.save(dto);
 	}
+	
+	//카드 등록
+	public Users registerCard(Users users) {
+		Users user =UsersRepo.findById(users.getUserId()).orElse(null);
+		user.setUserCard(users.getUserCard());
+		user.setUserCardpass(users.getUserCardpass());
+		UsersRepo.save(user);
+		return user;
+	}
 }
