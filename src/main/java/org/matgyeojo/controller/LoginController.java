@@ -2,6 +2,7 @@ package org.matgyeojo.controller;
 
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/login")
 public class LoginController {
 
+	@Autowired
 	private final LoginService loginService;
 	
 	//로그인

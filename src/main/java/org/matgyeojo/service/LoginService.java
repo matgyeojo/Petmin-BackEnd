@@ -2,6 +2,7 @@ package org.matgyeojo.service;
 
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.UsersRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class LoginService {
 	
-	private final UsersRepo usersRepo;
+	@Autowired
+	UsersRepo usersRepo;
 	
 	//로그인
 	public Users getUserById(Users users) {
