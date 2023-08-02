@@ -32,10 +32,11 @@ public class UserService {
 		return user;
 	}
 	
-	//개인정보 수정 - 주소
-	public Users updateAddress(Users users) {
+	//개인정보 수정 - 주소, 사진
+	public Users updateInfo(Users users) {
 		Users user = UsersRepo.findById(users.getUserId()).orElse(null);
 		user.setUserAddress(users.getUserAddress());
+		user.setUserImg(users.getUserImg());
 		UsersRepo.save(user);
 		return user;
 	}
