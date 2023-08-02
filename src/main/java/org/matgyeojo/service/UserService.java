@@ -19,8 +19,13 @@ public class UserService {
 		return UsersRepo.existsByUserId(userId);
 	}
 	
-	public void signup(Users dto) {
-		UsersRepo.save(dto);
+	public String signup(Users dto) {
+		try {
+			UsersRepo.save(dto);
+			return "회원가입 성공";
+		} catch (Exception e) {
+			return "회원가입 실패";
+		}
 	}
 	
  	//카드 등록
@@ -32,9 +37,14 @@ public class UserService {
 		return user;
 }
   
- 	public void preferenceSave(Preference dto) {
-		Users userId = UsersRepo.findById(dto.getUser().getUserId()).get();
-		dto.setUser(userId);
-		PreferenceRepo.save(dto);
+ 	public String preferenceSave(Preference dto, String userId) {
+		Users user = UsersRepo.findById(userId).orElse(null);
+		if(user != null) {
+			dto.setUser(user);
+			PreferenceRepo.save(dto);
+			return "선호도 저장 성공";
+		} else {
+			return "선호도 저장 실패";
+		}
  	}
 }
