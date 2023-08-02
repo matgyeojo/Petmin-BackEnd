@@ -37,7 +37,7 @@ public class PetsitterProfile {
 	
 	@Id
 	@Column(name = "user_id")
-	private int userid;
+	private String userid;
 	
 	@MapsId
 	@OneToOne
@@ -51,7 +51,7 @@ public class PetsitterProfile {
 	@Column(nullable = false)
 	private String sitterHousetype;//펫시티 거주형태
 	@Column(nullable = false)
-	private String sitterTem;//펫시터 온도
+	private double sitterTem;//펫시터 온도
 	@Column(nullable = false)
 	private String sitterMsg;//펫시터 자기소개
 	@OneToMany( mappedBy = "petsitter")
