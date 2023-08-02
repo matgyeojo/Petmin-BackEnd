@@ -124,4 +124,14 @@ public class PetProfileService {
 		}
 	}
 
+	public String petInformainDelete(Integer petNo) {
+		PetProfile petProfile = PetProfileRepo.findById(petNo).orElse(null);
+		if(petProfile != null) {
+			PetProfileRepo.deleteById(petNo);
+			return "삭제 성공";
+		} else {
+			return "삭제 성공";
+		}
+	}
+
 }

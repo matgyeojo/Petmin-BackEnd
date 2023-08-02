@@ -10,6 +10,8 @@ import org.matgyeojo.dto.Users;
 import org.matgyeojo.service.PetProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,19 +46,19 @@ public class PetProfileController {
 	}
 	
 	//해당 아이디의 반려동물 리스트(주인과 다른 사람이 볼 때 동일)
-	@PostMapping(value = "/petProfileList", consumes = "application/json")
+	@GetMapping(value = "/petProfileList", consumes = "application/json")
 	public List<PetProfile> petProfileList(@RequestBody Users user) {
 		return PetProfileService.petProfileList(user);
 	}
 	
 	//각각의 반려동물 프로필 조회 (주인은 조회 + 수정이 가능한 페이지 / 다른 사람은 조회만 가능하게 프론트에서 나누면 될 듯)
-	@PostMapping(value = "/petInformationRead/{petNo}")
+	@GetMapping(value = "/petInformationRead/{petNo}")
 	public Optional<PetProfile> petInformation(@PathVariable Integer petNo) {
 		return PetProfileService.petInformation(petNo);
 	}
 	
 	//반려동물 프로필 수정
-	@PutMapping("petInformationUpdate/{petNo}")
+	@PutMapping("/petInformationUpdate/{petNo}")
 	public ResponseEntity<String> petInformationUpdate(@RequestBody PetProfile dto, @PathVariable Integer petNo) {
 		String message = PetProfileService.petInformationUpdate(dto, petNo);
 		return ResponseEntity.ok(message);
@@ -73,6 +75,13 @@ public class PetProfileController {
 	@PutMapping("/petTendencyUpdate/{tendenctNo}")
 	public ResponseEntity<String> petTendencyUpdate(@RequestBody PetTendency dto, @PathVariable Integer tendenctNo) {
 		String message = PetProfileService.petTendencyUpdate(dto, tendenctNo);
+		return ResponseEntity.ok(message);
+	}
+	
+	//반려동물 프로필 삭제
+	@DeleteMapping("/petInformainDelete/{petNo}")
+	public ResponseEntity<String> petInformainDelete(@PathVariable Integer petNo) {
+		String message = PetProfileService.petInformainDelete(petNo);
 		return ResponseEntity.ok(message);
 	}
 }
