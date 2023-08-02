@@ -16,7 +16,7 @@ public class HospitalController {
     public HospitalController(HospitalService hospitalService) {
         this.hospitalService = hospitalService;
     }
-    //서울 동뭉병원
+    //서울 동뭉병원 - 이슈있음
     @GetMapping("/seoul")
     public void saveDataFromApi() {
         hospitalService.saveDataFromApi();
