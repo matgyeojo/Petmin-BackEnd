@@ -19,7 +19,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Setter
 @Builder
@@ -36,7 +38,7 @@ public class Preference {
 	// FK: 킬람이 board_bnofh 로 생성된다
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
+	//@JsonIgnore
 	@JoinColumn(name = "user_id")
 	private Users user;
 
