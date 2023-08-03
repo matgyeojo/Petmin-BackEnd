@@ -1,5 +1,6 @@
 package org.matgyeojo.service;
 
+import org.matgyeojo.dto.PetsitterProfile;
 import org.matgyeojo.dto.Preference;
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.PreferenceRepo;
@@ -46,14 +47,20 @@ public class UserService {
 		return user;
 	}
   
+
  	public String preferenceSave(Preference dto, String userId) {
 		Users user = UsersRepo.findById(userId).orElse(null);
 		if(user != null) {
 			dto.setUser(user);
+    	PetsitterProfile sitter = PetsitterProfile.builder().users(user).sitterTem(39.0).build();
+
+		user.setPetsitterProfile(sitter);
+		UsersRepo.save(user);//유저 밑에 시터가 있기때문에 유저를 저장
 			PreferenceRepo.save(dto);
 			return "선호도 저장 성공";
 		} else {
 			return "선호도 저장 실패";
 		}
+
  	}
 }

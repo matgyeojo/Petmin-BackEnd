@@ -2,14 +2,17 @@ package org.matgyeojo.service;
 
 import java.io.IOException;
 
+import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetsitterProfile;
 import org.matgyeojo.dto.Users;
+import org.matgyeojo.repository.DolbomRepo;
 import org.matgyeojo.repository.PetProfileRepo;
 import org.matgyeojo.repository.PetsitterProfileRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -22,6 +25,8 @@ public class PetSitterService {
 	PetsitterProfileRepo petsitterrepo;
 	@Autowired
 	PetProfileRepo petrepo;
+	@Autowired
+	DolbomRepo dolbomrepo;
 
 	// 펫시터 프로필 생성
 	public String petSitterInsert(String userId, MultipartFile[] sitterHouse, String sitterHousetype, String sitterMsg)
@@ -54,8 +59,10 @@ public class PetSitterService {
 	public String petsitterUpdate(String userId, MultipartFile[] sitterHouse, String sitterHousetype, String sitterMsg) throws IOException {
 		Users user = userrepo.findById(userId).orElse(null);
 
+		//이미지 리스트시작
 		String image_list = "[";
 
+		//배열로 된 파일목록 하나씩 짤라서 저장
 		for (MultipartFile img : sitterHouse) {
 			if (img != null && !img.isEmpty()) {
 				String sotredFileName = s3uploader.upload(img, "house");
@@ -103,6 +110,16 @@ public class PetSitterService {
 
 		System.out.println(msg);
 		return msg;
+	}
+	
+	//펫시터 스케쥴 저장
+	public int petsitterScadure(String sitterId, String scaduleDay, String scaduleHour, String dolbomOption) {
+		Users sitter = userrepo.findById(sitterId).orElse(null);
+		
+		Dolbom dol = Dolbom.builder().user2(sitter).scheduleDay(scaduleDay).scheduleHour(scaduleHour).dolbomStatus(false).dolbomOption(dolbomOption).build();
+		
+		dolbomrepo.save(dol);
+		return dol.getDolbomNo();
 	}
 
 }

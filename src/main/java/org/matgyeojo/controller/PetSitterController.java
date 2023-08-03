@@ -3,6 +3,10 @@ package org.matgyeojo.controller;
 import java.io.IOException;
 
 import org.matgyeojo.dto.PetsitterProfile;
+import org.matgyeojo.dto.Users;
+import org.matgyeojo.repository.DolbomRepo;
+import org.matgyeojo.repository.PetProfileRepo;
+import org.matgyeojo.repository.UsersRepo;
 import org.matgyeojo.service.PetSitterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +24,12 @@ public class PetSitterController {
 
 	@Autowired
 	PetSitterService sitterService;
-	
+	@Autowired
+	DolbomRepo dolbomrepo;
+	@Autowired
+	UsersRepo userrepo;
+	@Autowired
+	PetProfileRepo petrepo;
 
 	@PostMapping(value = "/update")
 	public ResponseEntity<?> petsitterUpdate(@RequestParam String userId,@RequestParam MultipartFile[] sitterHouse,@RequestParam String sitterHousetype,@RequestParam String sitterMsg ) {
@@ -44,4 +53,9 @@ public class PetSitterController {
 		return ResponseEntity.ok(user_id);
 	}
 	
+	@PostMapping(value = "/schedule")
+	public int petsitterScadure(@RequestParam String sitterId,@RequestParam String scaduleDay,@RequestParam String scaduleHour,@RequestParam String dolbomOption) {
+		
+		return sitterService.petsitterScadure(sitterId, scaduleDay, scaduleHour, dolbomOption);
+	}
 }

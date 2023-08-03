@@ -48,7 +48,7 @@ public class PetService {
 				.petAge(6)
 				.petSpecies("포메라니안")
 				.petWeight(6.17)
-				.petSex("남")
+				.petSex("남아")
 				.user(user)
 				.petImg(image_list+"]")
 				.build();
