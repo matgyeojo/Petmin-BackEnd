@@ -62,10 +62,11 @@ public class Users {
 	// 연관관계설정:1:n
 	// mappedBy
 	//채팅방
-	@OneToMany( mappedBy = "user1")
-	private List<Chatroom> chatrooms;
-	@OneToMany(mappedBy = "user2")
-	private List<Chatroom> Chatrooms2;
+    @OneToMany(mappedBy = "sender")
+    private List<Chatroom> sentChatrooms; // 변경된 이름
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Chatroom> receivedChatrooms; // 변경된 이름
 
 	//선호필터
 	@OneToMany( mappedBy = "user")

@@ -1,6 +1,8 @@
 package org.matgyeojo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.matgyeojo.dto.GyeonggiHospital;
 import org.matgyeojo.dto.Hospital;
@@ -43,8 +45,14 @@ public class HospitalController {
     
     //사용자가 주소창에 입력한 텍스트로 병원 검색
     @GetMapping("/maplist")
-    public ResponseEntity<List<GyeonggiHospital>> getGyeonggiHospitalsByRoadAddress(@RequestParam("hospitalAddress") String hospitalAddress) {
-    List<GyeonggiHospital> hospitals = hospitalService.findGyeonggiHospitalsByRoadAddress(hospitalAddress);
-    return ResponseEntity.ok(hospitals);
+    public ResponseEntity<Map<String, List<GyeonggiHospital>>> searchHospitals(
+            @RequestParam("searchTerm") String searchTerm) {
+
+        List<GyeonggiHospital> hospitals = hospitalService.searchHospitals(searchTerm);
+
+        Map<String, List<GyeonggiHospital>> resultMap = new HashMap<>();
+        resultMap.put("hospitals", hospitals);
+
+        return ResponseEntity.ok(resultMap);
     }
 }
