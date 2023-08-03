@@ -53,10 +53,12 @@ public class Users {
 	private int userCardpass;//유저카드비밀번호
 	@Column(nullable = false)
 	private String userLicence;
+	@Column(nullable = true)
+	private String userImg;
 	@UpdateTimestamp
 	private Timestamp userUpdateTime;//유저마지막업데이트날짜
 
-	@OneToOne(mappedBy = "users")
+	@OneToOne(mappedBy = "users",cascade = CascadeType.ALL)
 	private PetsitterProfile petsitterProfile;
 
 	// 연관관계설정:1:n
@@ -87,9 +89,9 @@ public class Users {
 	@OneToMany( mappedBy = "sitter")
 	private List<PetSub> sitters;
 	//돌봄
-	@OneToMany(mappedBy="user1")
+	@OneToMany(mappedBy="user1")//사용자
 	private List<Dolbom> dolbom1;
-	@OneToMany(mappedBy="user2")
+	@OneToMany(mappedBy="user2")//펫시터
 	private List<Dolbom> dolbom2;
 	
 	

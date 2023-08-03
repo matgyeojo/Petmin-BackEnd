@@ -13,18 +13,18 @@ public class LoginTest {
 	@Autowired
 	UsersRepo userrepo;
 	
-//	@Test
+	@Test
 	public void userAdd() {
  		Users user = Users.builder()
-						  .userId("admin")
+						  .userId("admin2")
 						  .userPass("1234")
-						  .userName("admin")
+						  .userName("admin2")
 						  .userAge(25)
 						  .userAddress("Bucheon")
 						  .userSex("f")
-						  .userCard("12345-6789")
+						  .userCard("12345-67892")
 						  .userCardpass(1234)
-						  .userLicence("1등급")
+						  .userLicence("실버펫시터")
 						  .build();
 		userrepo.save(user);
 	}

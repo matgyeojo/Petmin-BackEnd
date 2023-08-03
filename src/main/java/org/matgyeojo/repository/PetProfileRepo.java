@@ -11,5 +11,12 @@ public interface PetProfileRepo extends CrudRepository<PetProfile, Integer>{
 	//펫 이름 검색
 	public PetProfile findByPetName(String petName);
 	//펫 주인 검색
-//	public List<PetProfile> findByUsers(Users user);
+	public List<PetProfile> findByUser(Users user);
+	//펫 성별 , 몸무게 필터링(소형견)
+	public List<PetProfile> findByPetSexAndPetWeightLessThan(String petSex,double petWeight);
+	//펫 성별 , 몸무게 필터링(중형견)
+	public List<PetProfile> findByPetSexAndPetWeightBetween(String petSex,double petWeight,double petWeight2);
+	//펫 성별 , 몸무게 필터링(대형견)
+	public List<PetProfile> findByPetSexAndPetWeightGreaterThan(String petSex,double petWeight);
 }
+  
