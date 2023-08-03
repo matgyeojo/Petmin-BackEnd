@@ -37,7 +37,7 @@ public class PetsitterProfile {
 	
 	@Id
 	@Column(name = "user_id")
-	private String userid;
+	private String userId;
 	
 	@MapsId
 	@OneToOne

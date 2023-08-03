@@ -51,6 +51,8 @@ public class Users {
 	private String userCard;//유저카드번호
 	@Column(nullable = true)
 	private int userCardpass;//유저카드비밀번호
+	@Column(nullable = true)
+	private String userImg;//유저 사진
 	@Column(nullable = false)
 	private String userLicence;
 	@UpdateTimestamp

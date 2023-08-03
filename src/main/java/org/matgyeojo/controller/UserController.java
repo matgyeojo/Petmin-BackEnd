@@ -28,9 +28,9 @@ public class UserController {
 		return userService.registerCard(user);
 	}
 	
-	//개인정보 수정 - 주소
-	@PutMapping(value = "/updateAddress")
-	public Users updateAddress(@RequestBody Users user) {
-		return userService.updateAddress(user);
+	//개인정보 수정 - 주소, 사진
+	@PutMapping(value = "/updateInfo")
+	public Users updateInfo(@RequestBody Users user) {
+		return userService.updateInfo(user);
 	}
 }

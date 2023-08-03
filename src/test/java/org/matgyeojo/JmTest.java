@@ -5,6 +5,7 @@ import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetProfile;
 import org.matgyeojo.dto.PetsitterProfile;
 import org.matgyeojo.dto.Users;
+import org.matgyeojo.repository.DolbomRepo;
 import org.matgyeojo.repository.PetProfileRepo;
 import org.matgyeojo.repository.PetsitterProfileRepo;
 import org.matgyeojo.repository.UsersRepo;
@@ -20,21 +21,24 @@ public class JmTest {
 	PetsitterProfileRepo petsitterrepo;
 	@Autowired
 	PetProfileRepo petrepo;
+	@Autowired
+	DolbomRepo dolbomrepo;
 	
-//	//돌봄 등록
-//	@Test
-//	void dolbomInsert() {
-//		Users user = userrepo.findById(2).orElse(null);
-//		PetsitterProfile sitter =  petsitterrepo.findById(1).orElse(null);
-//		PetProfile pet = petrepo.findByPetName("자몽");
-//		
-//		Dolbom dol = Dolbom.builder().scheduleDay()..build();
-//		
-//		
-//	}
+	//돌봄 등록
+	@Test
+	void dolbomInsert() {
+		Users user = userrepo.findById("지만2").orElse(null);
+		Users sitter =  userrepo.findById("지만").orElse(null);
+		PetProfile pet = petrepo.findByPetName("자몽");
+		
+		Dolbom dol = Dolbom.builder().user1(user).user2(sitter).petProfile(pet).scheduleDay("2023/08/01").scheduleHour("00:00").dolbomStatus(false).dolbomOption("단기예약").build();
+		
+		dolbomrepo.save(dol);
+		
+	}
 	
 	//펫등록
-	@Test
+	//@Test
 	void petInsert() {
 		Users user = userrepo.findById("지만").orElse(null);
 		
