@@ -59,12 +59,12 @@ public class Dolbom {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	@JoinColumn(name = "pet_no")
-	private PetProfile petProfile;
+	PetProfile petProfile;
 	
-	@UpdateTimestamp
-	private Timestamp scheduleDay;// 펫시터 가능한 일
-	@UpdateTimestamp
-	private Timestamp scheduleHour;// 펫시터 가능한 시간
+	@Column(nullable = false)
+	private String scheduleDay;// 펫시터 가능한 일
+	@Column(nullable = false)
+	private String scheduleHour;// 펫시터 가능한 시간
 	@Column(nullable = true)
 	private Boolean dolbomStatus;// 예약여부
 	@Column(nullable = true)
