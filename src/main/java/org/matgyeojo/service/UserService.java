@@ -20,8 +20,13 @@ public class UserService {
 		return UsersRepo.existsByUserId(userId);
 	}
 	
-	public void signup(Users dto) {
-		UsersRepo.save(dto);
+	public String signup(Users dto) {
+		try {
+			UsersRepo.save(dto);
+			return "회원가입 성공";
+		} catch (Exception e) {
+			return "회원가입 실패";
+		}
 	}
 	
  	//카드 등록
@@ -31,17 +36,31 @@ public class UserService {
 		user.setUserCardpass(users.getUserCardpass());
 		UsersRepo.save(user);
 		return user;
-}
+	}
+	
+	//개인정보 수정 - 주소, 사진
+	public Users updateInfo(Users users) {
+		Users user = UsersRepo.findById(users.getUserId()).orElse(null);
+		user.setUserAddress(users.getUserAddress());
+		user.setUserImg(users.getUserImg());
+		UsersRepo.save(user);
+		return user;
+	}
   
- 	public void preferenceSave(Preference dto) {
-		Users userId = UsersRepo.findById(dto.getUser().getUserId()).get();
-		dto.setUser(userId);
-		
-		Users user = UsersRepo.findById(dto.getUser().getUserId()).orElse(null);
-		PetsitterProfile sitter = PetsitterProfile.builder().users(user).sitterTem(39.0).build();
+
+ 	public String preferenceSave(Preference dto, String userId) {
+		Users user = UsersRepo.findById(userId).orElse(null);
+		if(user != null) {
+			dto.setUser(user);
+    	PetsitterProfile sitter = PetsitterProfile.builder().users(user).sitterTem(39.0).build();
 
 		user.setPetsitterProfile(sitter);
 		UsersRepo.save(user);//유저 밑에 시터가 있기때문에 유저를 저장
-		PreferenceRepo.save(dto);
+			PreferenceRepo.save(dto);
+			return "선호도 저장 성공";
+		} else {
+			return "선호도 저장 실패";
+		}
+
  	}
 }

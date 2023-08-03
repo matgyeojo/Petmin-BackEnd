@@ -16,15 +16,21 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/card")
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
 	//카드 등록
-	@PutMapping(value = "/register")
+	@PutMapping(value = "/cardRegister")
 	public Users registerCard(@RequestBody Users user){
 		return userService.registerCard(user);
+	}
+	
+	//개인정보 수정 - 주소, 사진
+	@PutMapping(value = "/updateInfo")
+	public Users updateInfo(@RequestBody Users user) {
+		return userService.updateInfo(user);
 	}
 }

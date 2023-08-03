@@ -51,6 +51,8 @@ public class Users {
 	private String userCard;//유저카드번호
 	@Column(nullable = true)
 	private int userCardpass;//유저카드비밀번호
+	@Column(nullable = true)
+	private String userImg;//유저 사진
 	@Column(nullable = false)
 	private String userLicence;
 	@Column(nullable = true)
@@ -64,10 +66,11 @@ public class Users {
 	// 연관관계설정:1:n
 	// mappedBy
 	//채팅방
-	@OneToMany( mappedBy = "user1")
-	private List<Chatroom> chatrooms;
-	@OneToMany(mappedBy = "user2")
-	private List<Chatroom> Chatrooms2;
+    @OneToMany(mappedBy = "sender")
+    private List<Chatroom> sentChatrooms; // 변경된 이름
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Chatroom> receivedChatrooms; // 변경된 이름
 
 	//선호필터
 	@OneToMany( mappedBy = "user")
