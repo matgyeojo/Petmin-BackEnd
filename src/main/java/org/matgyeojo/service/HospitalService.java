@@ -162,7 +162,7 @@ public class HospitalService {
     }
     
     //프론트엔드한테 입력받은 hospitalAddress를 조건검색
-    public List<GyeonggiHospital> findGyeonggiHospitalsByRoadAddress(String hospitalAddress) {
-        return gyeonggiHospitalRepository.findByREFINE_LOTNO_ADDRContainingOrderByHospitalPartnerDesc(hospitalAddress);
+    public List<GyeonggiHospital> searchHospitals(String searchTerm) {
+        return gyeonggiHospitalRepository.searchHospitals(searchTerm);
     }
-}
+ }
