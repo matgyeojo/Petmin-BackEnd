@@ -1,13 +1,11 @@
 package org.matgyeojo.websocket;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -32,13 +30,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Service
-@ServerEndpoint("/socket/chatt")
+@ServerEndpoint(value = "/socket/chatt/{room}",configurator = ServerEndpointConfigurator.class)
 public class WebSocketChat {
 	private static Map<Long, List<Session>> clients = Collections.synchronizedMap(new HashMap<>());
 
     private static Logger logger = LoggerFactory.getLogger(WebSocketChat.class);
 
-    
     @Autowired
     ChatRepo chatRepo; 
     
@@ -46,93 +43,87 @@ public class WebSocketChat {
     ChatroomRepo chatroomRepo;
     
     @Autowired
-    UsersRepo usersRepo;
+    UsersRepo userRepo;
+ 
     
-    @OnOpen
+    @OnOpen //클라이언트가 접속할 때 마다 실행
     public void onOpen(Session session, @PathParam("room") Integer chatroomNo) {
-        // DB에서 과거 채팅 내역을 clent에게 보내준다.
+        // DB에서 과거 채팅 내역을 client에게 보내준다.
         Long room = chatroomNo.longValue();
         logger.info("open session : {}, clients={}", session.toString(), clients);
         Map<String, List<String>> res = session.getRequestParameterMap();
         logger.info("res={}", res);
 
-        System.err.println("room : " + room);
-        // 팅방 번호에 이미 클라이언트 세션이 연결되어 있는지 확인
-        if (clients.containsKey(room)) {
-            // 이미 채팅방에 클라이언트 세션이 존재하므로 해당 세션을 리스트에 추가
-            clients.get(room).add(session);
-        } else {
-        	//연결되어 있지 않은 경우, 새로운 세션을 리스트에 추가하고 맵에 채팅방 번호와 함께 저장
-            List<Session> ls = new ArrayList<Session>();
-            ls.add(session);
-            clients.put(room, ls);
+            // 채팅방에 이미 연결된 세션이 있는지 확인
+            if (clients.containsKey(room)) {
+                // 이미 연결된 세션이 있을 경우 새로운 세션만 추가
+                clients.get(room).add(session);
+            } else {
+                // 연결된 세션이 없을 경우 새로운 리스트를 생성하고 세션을 추가
+                List<Session> ls = new ArrayList<Session>();
+                ls.add(session);
+                clients.put(room, ls);
+            }
         }
-    }
     
-    @OnMessage
+    
+    @OnMessage //실행 중일때
     public void onMessage(String message, Session session) throws IOException {
         System.err.println("웹소켓온메세지");
-        
-        // 들어온 채팅 메세지와 사용자 정보를 DB에 저장한다.
+
         ObjectMapper mapper = new ObjectMapper();
         JsonNode jsonNode = mapper.readTree(message);
-        Integer chatNo = jsonNode.get("room").asInt(); //방 번호 추출
-        String chatMsg = jsonNode.get("chatMsg").asText(); //메세지 추출
-        String startId = jsonNode.get("startId").asText(); // 보내는 사람 추출
-        String endId = jsonNode.get("endId").asText(); //받는 사람 추출
-        String sentTimeStr = jsonNode.get("chatDate").asText(); // 보낸 시간 추출
-        
-        
-        System.err.println("chatNo : " + chatNo);
-        
-        // ChatroomRepo를 사용하여 채팅방 정보를 가져온다.
-        Optional<Chatroom> chatroomOptional = chatroomRepo.findById(chatNo);
-        if (chatroomOptional.isPresent()) {
-            Chatroom chatroom = chatroomOptional.get();
-            
-            // 사용자 아이디로 Users 엔티티 조회
-            Optional<Users> sender = usersRepo.findById(startId);
-            Optional<Users> receiver = usersRepo.findById(endId);
-            
-            if (!sender.isPresent() || !receiver.isPresent()) {
-               System.out.println("올바르지 않은 발신자 또는 수신자");
-               return;
+        String chatMsg = jsonNode.get("chatMsg").asText();
+        String startIdString = jsonNode.get("startId").asText();
+        Long chatroomId = Long.parseLong(jsonNode.get("room").asText());
+
+        Users startUser = userRepo.findById(startIdString).orElse(null);
+        if (startUser == null) {
+            System.out.println("no user found");
+            return;
+        }
+
+        // 사용자 정보를 이용하여 sender와 receiver 정보를 가져옴
+        String receiverId = jsonNode.get("receiverId").asText();
+        Users receiverUser = userRepo.findById(receiverId).orElse(null);
+        if (receiverUser == null) {
+            System.out.println("no receiver found");
+            return;
+        }
+
+        // Chatroom을 검색
+        Chatroom chatroom = chatroomRepo.findBySenderAndReceiver(startUser, receiverUser);
+        if (chatroom == null) {
+            System.out.println("no chat room");
+            return;
+        }
+
+        Chat chat = Chat.builder()
+            .startId(startUser)
+            .chatMsg(chatMsg)
+            .chatroom(chatroom)
+            .build();
+        chatRepo.save(chat);
+
+        // 방에 참여 중인 모든 클라이언트들에게 메시지를 보낸다.
+        logger.info("receive message : {}", message);
+
+        List<Session> sessionList = clients.get(chatroomId);
+        System.err.println("slist : " + sessionList);
+        for (Session s : sessionList) {
+            try {
+                System.out.println("데이터 전송시작");
+                logger.info("메세지 : test send data : {}", message);
+                System.out.println("메세지 : " + message);
+                s.getBasicRemote().sendText(message);
+                System.out.println("데이터 전송완료");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            
-            // 보낸 시간을 Timestamp 형태로 변환
-            Timestamp sentTime = Timestamp.valueOf(sentTimeStr);
-            
-            // Chat 엔티티 생성 및 DB저장
-            Chat chat = new Chat();
-            chat.setChatroom(chatroom);
-            chat.setStartId(sender.get());
-            chat.setEndId(receiver.get()); 
-            chat.setChatMsg(chatMsg);
-            chat.setChatImg(null);
-            chat.setChatDate(sentTime); 
-            chat.setChatCheck(false);
-            chatRepo.save(chat);
-	            
-            // 방에 참여 중인 모든 클라이언트들에게 메시지를 보낸다.
-            logger.info("receive message : {}", message);
-            
-            List<Session> sessionList = clients.get(chatNo.longValue());
-            if (sessionList != null && !sessionList.isEmpty()) {
-                for (Session s : sessionList) {
-                    try {
-                        s.getBasicRemote().sendText(message);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                System.out.println("이 채팅방에 클라이언트가 없습니다");
-            }
-        } else {
-            System.out.println("채팅방을 찾을 수 없습니다");
         }
     }
 		
+    
     @OnClose // 클라이언트가 접속을 종료할 시
     public void onClose(Session session, @PathParam("room") Integer chatroomNo) {
         logger.info("session close : {}", session);

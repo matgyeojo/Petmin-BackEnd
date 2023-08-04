@@ -13,7 +13,9 @@ public interface GyeonggiHospitalRepository extends JpaRepository<GyeonggiHospit
 	boolean existsByREFINE_ROADNM_ADDR(@Param("roadAddress") String roadAddress);
 	
 	//사용자가 주소창에 주소를 검색하면 REFINE_LOTNO_ADDR like 해서 주소 검색 후 정보 전달 / hospitalPartner(제휴)된거 먼저 보여주게한다.
-	@Query("SELECT h FROM GyeonggiHospital h WHERE h.REFINE_LOTNO_ADDR LIKE %:hospitalAddress% ORDER BY h.hospitalPartner DESC")
-	List<GyeonggiHospital> findByREFINE_LOTNO_ADDRContainingOrderByHospitalPartnerDesc(@Param("hospitalAddress") String hospitalAddress);
-}
+	@Query("SELECT h FROM GyeonggiHospital h WHERE h.REFINE_LOTNO_ADDR LIKE %:searchTerm% OR h.BIZPLC_NM LIKE %:searchTerm% ORDER BY h.hospitalPartner DESC")
+	List<GyeonggiHospital> searchHospitals(@Param("searchTerm") String searchTerm);
+	}
+	
+
 

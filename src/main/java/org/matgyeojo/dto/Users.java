@@ -58,16 +58,17 @@ public class Users {
 	@UpdateTimestamp
 	private Timestamp userUpdateTime;//유저마지막업데이트날짜
 
-	@OneToOne(mappedBy = "users")
+	@OneToOne(mappedBy = "users",cascade = CascadeType.ALL)
 	private PetsitterProfile petsitterProfile;
 
 	// 연관관계설정:1:n
 	// mappedBy
 	//채팅방
-	@OneToMany( mappedBy = "user1")
-	private List<Chatroom> chatrooms;
-	@OneToMany(mappedBy = "user2")
-	private List<Chatroom> Chatrooms2;
+    @OneToMany(mappedBy = "sender")
+    private List<Chatroom> sentChatrooms; // 변경된 이름
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Chatroom> receivedChatrooms; // 변경된 이름
 
 	//선호필터
 	@OneToMany( mappedBy = "user")
@@ -89,9 +90,9 @@ public class Users {
 	@OneToMany( mappedBy = "sitter")
 	private List<PetSub> sitters;
 	//돌봄
-	@OneToMany(mappedBy="user1")
+	@OneToMany(mappedBy="user1")//사용자
 	private List<Dolbom> dolbom1;
-	@OneToMany(mappedBy="user2")
+	@OneToMany(mappedBy="user2")//펫시터
 	private List<Dolbom> dolbom2;
 	
 	
