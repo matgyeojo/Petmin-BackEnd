@@ -5,6 +5,7 @@ import org.matgyeojo.dto.Users;
 import org.matgyeojo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class SignUpController {
 		@Autowired
 		UserService UserService;
@@ -25,8 +27,8 @@ public class SignUpController {
 		}
 		
 		//아이디 중복체크
-		@GetMapping("/checkDuplicateId")
-		public ResponseEntity<Boolean> checkDuplicateId(@RequestParam String userId) {
+		@GetMapping("/checkDuplicateId/{userId}")
+		public ResponseEntity<Boolean> checkDuplicateId(@PathVariable String userId) {
 			return ResponseEntity.ok(UserService.checkDuplicateId(userId));
 		}
 
