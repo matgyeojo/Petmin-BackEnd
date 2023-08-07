@@ -1,7 +1,9 @@
 package org.matgyeojo.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetsitterProfile;
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.DolbomRepo;
@@ -31,6 +33,19 @@ public class PetSitterController {
 	@Autowired
 	PetProfileRepo petrepo;
 
+	//펫시터 프로필 가져오기
+	@GetMapping(value = "/getSitter")
+	public PetsitterProfile getSitter(@RequestParam String userId) {
+		return sitterService.getSitter(userId);
+	}
+	//펫시터 일정 가져오기
+	@GetMapping(value = "getSchedure")
+	public List<Dolbom> getSchedure(@RequestParam String userId,@RequestParam String scheduleDay){
+		return sitterService.getSchedure(userId);
+	}
+	
+	
+	//펫시터 업데이트
 	@PostMapping(value = "/update")
 	public ResponseEntity<?> petsitterUpdate(@RequestParam String userId,@RequestParam MultipartFile[] sitterHouse,@RequestParam String sitterHousetype,@RequestParam String sitterMsg ) {
 		String user_id = null;
@@ -42,6 +57,7 @@ public class PetSitterController {
 		return ResponseEntity.ok(user_id);
 	}
 	
+	//펫시터 생성
 	@PostMapping(value = "/insert")
 	public ResponseEntity<?> petsitterInsert(@RequestParam String userId,@RequestParam MultipartFile[] sitterHouse,@RequestParam String sitterHousetype,@RequestParam String sitterMsg ) {
 		String user_id = null;
@@ -53,9 +69,10 @@ public class PetSitterController {
 		return ResponseEntity.ok(user_id);
 	}
 	
+	//펫시터 스케쥴 등록
 	@PostMapping(value = "/schedule")
-	public int petsitterScadure(@RequestParam String sitterId,@RequestParam String scaduleDay,@RequestParam String scaduleHour,@RequestParam String dolbomOption) {
+	public int petsitterScadure(@RequestParam String sitterId,@RequestParam String scheduleDay,@RequestParam String[] scheduleHour,@RequestParam String dolbomOption) {
 		
-		return sitterService.petsitterScadure(sitterId, scaduleDay, scaduleHour, dolbomOption);
+		return sitterService.petsitterScadure(sitterId,scheduleDay, scheduleHour, dolbomOption);
 	}
 }

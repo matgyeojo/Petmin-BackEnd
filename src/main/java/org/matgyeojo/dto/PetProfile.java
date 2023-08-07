@@ -60,13 +60,16 @@ public class PetProfile {
 	// 펫 접종이랑 1대1
 	
 	@OneToOne(mappedBy = "petprofile")
+	@JsonIgnore
 	private PetVaccine petVaccine;
 
 	// 펫 성향이랑 1대1
 	@OneToOne(mappedBy = "petprofile")
+	@JsonIgnore
 	private PetTendency petTendency;
 	
 	//돌봄
 	@OneToMany(mappedBy="petProfile")
+	@JsonIgnore
 	private List<Dolbom> dolbom;
 }

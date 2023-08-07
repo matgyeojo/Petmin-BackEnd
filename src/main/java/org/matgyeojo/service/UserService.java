@@ -46,6 +46,11 @@ public class UserService {
 		UsersRepo.save(user);
 		return user;
 	}
+	
+	//유저 정보 얻기
+	public Users getUserInfo(String userId) {
+		return UsersRepo.findById(userId).orElse(null);
+	}
   
 
  	public String preferenceSave(Preference dto, String userId) {
