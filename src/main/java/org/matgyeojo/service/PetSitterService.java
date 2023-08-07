@@ -145,14 +145,14 @@ public class PetSitterService {
 	}
 	
 	//펫시터 프로필 가져오기
-	public PetsitterProfile getSitter(String userId) {
-		PetsitterProfile sitter = petsitterrepo.findById(userId).orElse(null);
+	public PetsitterProfile getSitter(String sitterID) {
+		PetsitterProfile sitter = petsitterrepo.findById(sitterID).orElse(null);
 		return sitter;
 	}
 	
 	//펫시터 일정 가져오기
-	public HashMap<String, Boolean> getSchedure(String userId,String scheduleDay){
-		Users user = userrepo.findById(userId).orElse(null);
+	public HashMap<String, Boolean> getSchedure(String sitterID,String scheduleDay){
+		Users user = userrepo.findById(sitterID).orElse(null);
 		List<Dolbom> dols = dolbomrepo.findByUser2AndScheduleDay(user,scheduleDay);
 		
 		HashMap<String, Boolean> map = new HashMap<>();
