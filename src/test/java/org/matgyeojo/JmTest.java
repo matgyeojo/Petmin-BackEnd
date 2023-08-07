@@ -9,11 +9,13 @@ import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetProfile;
 import org.matgyeojo.dto.PetsitterProfile;
 import org.matgyeojo.dto.Preference;
+import org.matgyeojo.dto.Review;
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.DolbomRepo;
 import org.matgyeojo.repository.PetProfileRepo;
 import org.matgyeojo.repository.PetsitterProfileRepo;
 import org.matgyeojo.repository.PreferenceRepo;
+import org.matgyeojo.repository.ReviewRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,9 +36,36 @@ public class JmTest {
 	DolbomRepo dolbomrepo;
 	@Autowired
 	PreferenceRepo prerepo;
+	@Autowired
+	ReviewRepo rerepo;
+	
+	//리뷰입력
+	@Test
+	void reInsert() {
+		Users user = userrepo.findById("지만").orElse(null);
+		Users sitter = userrepo.findById("지만2").orElse(null);
+		Review re = Review.builder()
+				.user(user)
+				.petsitter(sitter)
+				.reviewTime(3)
+				.reviewKind(4)
+				.reviewDelecacy(1)
+				.reviewMsg("아쉽네여~")
+				.build();
+		Review re2 = Review.builder()
+				.user(user)
+				.petsitter(sitter)
+				.reviewTime(2)
+				.reviewKind(5)
+				.reviewDelecacy(3)
+				.reviewMsg("아쉽네여~")
+				.build();
+		rerepo.save(re);
+		rerepo.save(re2);
+	}
 	
 	//선호 입력
-	@Test
+	//@Test
 	void preInsert() {
 		Users user = userrepo.findById("지만").orElse(null);
 		Preference p = Preference.builder().preference1("남").preference2(20).preference3("아파트").preference4("남아").preference5("소형견").build();
