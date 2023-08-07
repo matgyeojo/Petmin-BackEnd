@@ -67,7 +67,7 @@ public class S3Uploader {
 	//MultipartFile File로 전환하는 코드
 	 // MultipartFile 을 file로 변형 후 로컬로 저장, 파일객체를 리턴
 	private Optional<File> convert(MultipartFile file) throws IOException{ 
-		 File convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID());
+		 File convertFile = new File(file.getOriginalFilename());
 	        if(convertFile.createNewFile()) {
 	            try(FileOutputStream fos = new FileOutputStream(convertFile)) {
 	                fos.write(file.getBytes());

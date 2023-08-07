@@ -45,7 +45,7 @@ public class Preference {
 	@Column(nullable = false)
 	private String preference1; // 첫번째 선호
 	@Column(nullable = false)
-	private String preference2; // 두번째 선호
+	private int preference2; // 두번째 선호
 	@Column(nullable = false)
 	private String preference3; // 세번째 선호
 	@Column(nullable = false)

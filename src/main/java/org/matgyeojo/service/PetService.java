@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 public class PetService {
 
 	@Autowired
@@ -31,7 +30,7 @@ public class PetService {
 	// 펫프로필 생성
 	public Integer petInsert(String userId, String petName, MultipartFile[] petImgs) throws IOException {
 		Users user = userrepo.findById(userId).orElse(null);
-		log.info(user.getUserId());
+		
 		String image_list = "[";
 
 		for (MultipartFile img : petImgs) {
@@ -46,10 +45,10 @@ public class PetService {
 		// 펫프로필 생성
 		PetProfile pet = PetProfile.builder()
 				.petName(petName)
-				//.petAge(6)
-				//.petSpecies("포메라니안")
-				//.petWeight(6.17)
-				//.petSex("남")
+				.petAge(6)
+				.petSpecies("포메라니안")
+				.petWeight(6.17)
+				.petSex("남아")
 				.user(user)
 				.petImg(image_list+"]")
 				.build();
