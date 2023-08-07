@@ -35,6 +35,14 @@ public class JmTest {
 	@Autowired
 	PreferenceRepo prerepo;
 	
+	//선호 입력
+	@Test
+	void preInsert() {
+		Users user = userrepo.findById("지만").orElse(null);
+		Preference p = Preference.builder().preference1("남").preference2(20).preference3("아파트").preference4("남아").preference5("소형견").build();
+		prerepo.save(p);
+	}
+	
 	//필터링
 	//@Test
 	void dolbomFilter() {
@@ -179,7 +187,7 @@ public class JmTest {
 	}
 	
 	//유저입력
-	@Test
+	//@Test
 	void userInsert() {
 		Users u1 = Users.builder()
 				.userId("지만")
