@@ -59,6 +59,7 @@ public class PetsitterProfile {
 	@UpdateTimestamp
 	private Timestamp sitterUpdate;//펫시터 최종수정
 	@OneToMany( mappedBy = "petsitter")
+	@JsonIgnore
 	private List<Review> petsitter;
 	
 

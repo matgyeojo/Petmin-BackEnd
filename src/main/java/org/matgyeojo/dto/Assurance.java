@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,5 +39,6 @@ public class Assurance {
 	private String assuranceUsertype; //사용자 유형
 	
 	@OneToOne(mappedBy = "assuranceName")
+	@JsonIgnore
 	private UserAssurance userAssurance;
 }
