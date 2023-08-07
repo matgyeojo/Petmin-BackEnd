@@ -1,5 +1,7 @@
 package org.matgyeojo.service;
 
+import java.io.IOException;
+
 import org.matgyeojo.dto.PetsitterProfile;
 import org.matgyeojo.dto.Preference;
 import org.matgyeojo.dto.Users;
@@ -7,6 +9,7 @@ import org.matgyeojo.repository.PreferenceRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
@@ -15,6 +18,9 @@ public class UserService {
 	
 	@Autowired
 	PreferenceRepo PreferenceRepo;
+	
+	@Autowired
+	S3Uploader s3uploader;
 	
 	public boolean checkDuplicateId(String userId) {
 		return UsersRepo.existsByUserId(userId);
@@ -40,10 +46,14 @@ public class UserService {
 	}
 	
 	//개인정보 수정 - 주소, 사진
-	public Users updateInfo(Users users) {
+	public Users updateInfo(Users users,MultipartFile userImg) throws IOException {
 		Users user = UsersRepo.findById(users.getUserId()).orElse(null);
+		
+		if(userImg !=null && !userImg.isEmpty()) {
+			String sotredFileName = s3uploader.upload(userImg, "user");
+			user.setUserImg(sotredFileName);
+		}
 		user.setUserAddress(users.getUserAddress());
-		user.setUserImg(users.getUserImg());
 		UsersRepo.save(user);
 		return user;
 	}
