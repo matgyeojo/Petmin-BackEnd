@@ -18,7 +18,9 @@ public interface DolbomRepo extends CrudRepository<Dolbom, Integer>{
 	public List<Dolbom> findByUser2(Users user);
 	//펫시터 돌봄옵션 필터링
 	public List<Dolbom> findByDolbomOptionLike(String dolbomOption);
-	//펫시터의 어떤 날 가능한 시간
+	//펫시터 어떤 날
 	public List<Dolbom> findByUser2AndScheduleDay(Users user,String scheduleDay);
+	//펫시터의 어떤 날 어떤 시간
+	public Dolbom findByUser2AndScheduleDayAndScheduleHour(Users user,String scheduleDay,String scheduleHour);
 }
  
