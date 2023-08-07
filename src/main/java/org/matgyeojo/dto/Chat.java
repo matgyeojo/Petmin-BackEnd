@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,15 +39,18 @@ public class Chat {
 	//채팅방 시퀀스 FK
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "chatroom_no")
+	@JsonIgnore
 	private Chatroom chatroom; //채팅방
 
 	// 보내는 사람
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "start_id")
+	@JsonIgnore
     private Users startId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "end_id")
+	@JsonIgnore
     private Users endId;
 
 	@Column(nullable = false)

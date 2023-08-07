@@ -15,6 +15,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -59,40 +61,52 @@ public class Users {
 	private Timestamp userUpdateTime;//유저마지막업데이트날짜
 
 	@OneToOne(mappedBy = "users",cascade = CascadeType.ALL)
+	@JsonIgnore
 	private PetsitterProfile petsitterProfile;
 
 	// 연관관계설정:1:n
 	// mappedBy
 	//채팅방
     @OneToMany(mappedBy = "sender")
+    @JsonIgnore
     private List<Chatroom> sentChatrooms; // 변경된 이름
 
     @OneToMany(mappedBy = "receiver")
+    @JsonIgnore
     private List<Chatroom> receivedChatrooms; // 변경된 이름
 
 	//선호필터
 	@OneToMany( mappedBy = "user")
+	@JsonIgnore
 	private List<Preference> preferences;
 	//알람
 	@OneToMany( mappedBy = "user")
+	@JsonIgnore
 	private List<Alarm> alarms;
 	//채팅
 	@OneToMany( mappedBy = "startId")
+	@JsonIgnore
 	private List<Chat> chatStarts;
 	@OneToMany( mappedBy = "endId")
+	@JsonIgnore
 	private List<Chat> chatEnds;
 	//펫 프로필
 	@OneToMany( mappedBy = "user")
+	@JsonIgnore
 	private List<PetProfile> petProfiles;
 	//즐겨찾기
 	@OneToMany( mappedBy = "user")
+	@JsonIgnore
 	private List<PetSub> users;
 	@OneToMany( mappedBy = "sitter")
+	@JsonIgnore
 	private List<PetSub> sitters;
 	//돌봄
 	@OneToMany(mappedBy="user1")//사용자
+	@JsonIgnore
 	private List<Dolbom> dolbom1;
 	@OneToMany(mappedBy="user2")//펫시터
+	@JsonIgnore
 	private List<Dolbom> dolbom2;
 	
 	
