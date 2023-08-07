@@ -1,5 +1,7 @@
 package org.matgyeojo.controller;
 
+import java.io.IOException;
+
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.service.LoginService;
 import org.matgyeojo.service.UserService;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +40,14 @@ public class UserController {
 	
 	//개인정보 수정 - 주소, 사진
 	@PutMapping(value = "/updateInfo")
-	public Users updateInfo(@RequestBody Users user) {
-		return userService.updateInfo(user);
+	public Users updateInfo(@RequestBody Users user,@RequestParam MultipartFile userImg) {
+	
+		try {
+			return userService.updateInfo(user,userImg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
 	}
 }
