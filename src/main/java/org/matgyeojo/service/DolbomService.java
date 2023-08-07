@@ -38,9 +38,10 @@ public class DolbomService {
 	@Autowired
 	ReviewRepo reviewrepo;
 
+	//돌봄 선호필터 
 	public List<Object> dolbomFilter(String userId,String userAddress){
-		Users u = userrepo.findById(userId).orElse(null);
-		Preference pre =  prerepo.findByUser(u);
+		Users u = userrepo.findById(userId).orElse(null);//유저 가져오기
+		Preference pre =  prerepo.findByUser(u);//유저의 선호필터 가져오기
 		//String userSex,int userAge,String sitterHousetype, String petSex,double petWeight,String userAddress
 		//선호도 저장
 		String userSex = pre.getPreference1();
@@ -48,14 +49,16 @@ public class DolbomService {
 		String sitterHousetype = pre.getPreference3();
 		String petSex = pre.getPreference4();
 		String petWeight =pre.getPreference5();
-		if(userAddress.equals("")) {
+		if(userAddress.equals("")) {//입력값에 아무것도 입력 안하면 기본으로 자신의 주소
 			userAddress = u.getUserAddress();
 		}
 		
 		//1.users 테이블 = 성별, 나이
 		//2.sitter테이블 = 집 타입
 		//3.펫 프로필 테이블 = 성별 , 몸무게 (소형견 : 10kg미만,중형견:10~25,대형견 25~)
+		//성별,나이,사는곳
 		List<Users> users = userrepo.findByUserSexAndUserAgeGreaterThanEqualAndUserAddressStartingWith(userSex, userAge,userAddress);
+		//집 타입
 		List<PetsitterProfile> sitters = petsitterrepo.findBySitterHousetypeOrderBySitterUpdateDesc(sitterHousetype);
 		//if로 몸무게 조건걸어서 소중대형견 판별 지금은 예시로 소형견만
 		List <PetProfile> pets = new ArrayList<PetProfile>();
@@ -67,6 +70,7 @@ public class DolbomService {
 			pets= petrepo.findByPetSexAndPetWeightGreaterThan(petSex,25.00);
 		}
 		
+		//각각 리스트에 저장
 		List<String> filter1 = new ArrayList<>();
 		users.forEach(user->{
 			filter1.add(user.getUserId());
@@ -82,6 +86,7 @@ public class DolbomService {
 			filter3.add(pet.getUser().getUserId());
 			
 		});
+		//3개의 리스트 중 일치하는 것만 추출
 		List<String> filter4= new ArrayList<String>();
 		for(String fil1 : filter1) {//필터링
 			for(String fil2 : filter2) {
@@ -97,7 +102,7 @@ public class DolbomService {
 		List<Object> result = new ArrayList<>();
 		
 		for(String fil : filter4) {
-			
+			//필요한 정보들만 추출
 			HashMap<String, Object> map = new HashMap<>();
 			Users user = userrepo.findById(fil).orElse(null);
 			PetsitterProfile sitter = petsitterrepo.findById(fil).orElse(null);
@@ -174,7 +179,13 @@ public class DolbomService {
 	public int dolbomReservation(String userId, String sitterId,
 			 String scheduleDay, String[] scheduleHour) {
 		int msg = 0;
-		
+		Users sitter = userrepo.findById(sitterId).orElse(null);
+		for(String s : scheduleHour) {
+			Dolbom dol = dolbomrepo.findByUser2AndScheduleDayAndScheduleHour(sitter, scheduleDay, s);
+				dol.setDolbomStatus(true);
+				dolbomrepo.save(dol);
+				msg = 1;
+		}
 		
 		return msg;
 	}

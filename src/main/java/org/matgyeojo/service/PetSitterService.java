@@ -157,10 +157,12 @@ public class PetSitterService {
 		List<Dolbom> dols = dolbomrepo.findByUser2AndScheduleDay(user,scheduleDay);
 		List<Object> result = new ArrayList<>();
 		
-		HashMap<String, Object> map = new HashMap<>();
+		
 		for(Dolbom dol:dols) {
+			HashMap<String, Object> map = new HashMap<>();
 			map.put("day", scheduleDay);
 			map.put("dolbomOption", dol.getDolbomOption());
+			
 			HashMap<String, Boolean> map2 = new HashMap<>();
 			map2.put(dol.getScheduleHour(), dol.getDolbomStatus());
 			map.put("Hour", map2);
