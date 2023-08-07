@@ -43,8 +43,8 @@ public class PetSitterController {
 	// 펫시터 일정 가져오기
 	// 맵으로 보내주자 시간:스테이터스
 	@GetMapping(value = "/getSchedule")
-	public HashMap<String, Boolean> getSchedure(@RequestParam String sitterID, @RequestParam String scheduleDay) {
-		return sitterService.getSchedure(sitterID, scheduleDay);
+	public List<Object> getSchedure(@RequestParam String userId, @RequestParam String scheduleDay) {
+		return sitterService.getSchedure(userId, scheduleDay);
 	}
 
 	// 펫시터 업데이트
