@@ -1,12 +1,9 @@
 package org.matgyeojo.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
-import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetsitterProfile;
-import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.DolbomRepo;
 import org.matgyeojo.repository.PetProfileRepo;
 import org.matgyeojo.repository.UsersRepo;
@@ -53,12 +50,12 @@ public class PetSitterController {
 			@RequestParam String sitterHousetype, @RequestParam String sitterMsg) {
 		String user_id = null;
 
-			try {
-				user_id = sitterService.petsitterUpdate(userId, sitterHouse, sitterHousetype, sitterMsg);
-			} catch (IOException e) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-			}
-		
+		try {
+			user_id = sitterService.petsitterUpdate(userId, sitterHouse, sitterHousetype, sitterMsg);
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
 		return ResponseEntity.ok(user_id);
 	}
 
