@@ -164,7 +164,6 @@ public class DolbomService {
 		map.put("reviewDelecacy", delecacy);
 		map.put("reviewAll", allReview);
 		
-		
 		dolList.add(map);
 		
 		return dolList;
