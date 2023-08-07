@@ -1,6 +1,7 @@
 package org.matgyeojo.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetsitterProfile;
@@ -15,7 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.java.Log;
+
+
+
 @Service
+@Log
 public class PetSitterService {
 	@Autowired
 	S3Uploader s3uploader;
@@ -113,13 +119,40 @@ public class PetSitterService {
 	}
 	
 	//펫시터 스케쥴 저장
-	public int petsitterScadure(String sitterId, String scaduleDay, String scaduleHour, String dolbomOption) {
+	public int petsitterScadure(String sitterId, String scheduleDay, String[] scheduleHour, String dolbomOption) {
+		int msg =0;
 		Users sitter = userrepo.findById(sitterId).orElse(null);
+		//가능한 시간을 배열로 입력받아 따로따로 저장
+		for(String s:scheduleHour) {
+			if(dolbomrepo.findByUser2AndScheduleDayAndScheduleHour(sitterId,scheduleDay, s)>0) {
+				continue;
+			} 
+			
+			Dolbom dol = Dolbom.builder().user2(sitter).scheduleDay(scheduleDay).scheduleHour(s).dolbomStatus(false).dolbomOption(dolbomOption).build();
+			dolbomrepo.save(dol);
+		}
+		List<Dolbom> dols = dolbomrepo.findByScheduleDay(scheduleDay);
+		int count=0;
+		for(Dolbom dol : dols) {
+			count++;
+		}
+		if(count>0) {
+			msg=1;
+		} 
 		
-		Dolbom dol = Dolbom.builder().user2(sitter).scheduleDay(scaduleDay).scheduleHour(scaduleHour).dolbomStatus(false).dolbomOption(dolbomOption).build();
-		
-		dolbomrepo.save(dol);
-		return dol.getDolbomNo();
+		return msg;
+	}
+	
+	//펫시터 프로필 가져오기
+	public PetsitterProfile getSitter(String userId) {
+		PetsitterProfile sitter = petsitterrepo.findById(userId).orElse(null);
+		return sitter;
+	}
+	//펫시터 일정 가져오기
+	public List<Dolbom> getSchedure(String userId){
+		Users user = userrepo.findById(userId).orElse(null);
+		List<Dolbom> dols = dolbomrepo.findByUser2(user);
+		return dols;
 	}
 
 }
