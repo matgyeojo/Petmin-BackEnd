@@ -163,8 +163,9 @@ public class PetSitterService {
 			map.put("day", scheduleDay);
 			map.put("dolbomOption", dol.getDolbomOption());
 			
-			HashMap<String, Boolean> map2 = new HashMap<>();
-			map2.put(dol.getScheduleHour(), dol.getDolbomStatus());
+			HashMap<String, Object> map2 = new HashMap<>();
+			map2.put("Hour2", dol.getScheduleHour());
+			map2.put("dolbomStatus", dol.getDolbomStatus());
 			map.put("Hour", map2);
 			result.add(map);
 		}
