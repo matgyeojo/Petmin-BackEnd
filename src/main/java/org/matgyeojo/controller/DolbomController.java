@@ -22,14 +22,14 @@ public class DolbomController {
 	
 	//기본 선호필터 user랑 sitter정보만 + dolbom 스케쥴 날+ 돌봄옵션 뿌려주면 댐
 	@GetMapping(value = "/filter")
-	public List< Object> dolbomFilter(@RequestParam String userSex,@RequestParam int userAge,@RequestParam String sitterHousetype,@RequestParam String petSex,@RequestParam double petWeight,@RequestParam String userAddress){
-		return  dolbomService.dolbomFilter(userSex, userAge, sitterHousetype, petSex, petWeight,userAddress);
+	public List< Object> dolbomFilter(@RequestParam String userId,@RequestParam String userAddress){
+		return  dolbomService.dolbomFilter(userId,userAddress);
 	}
 	
 	
 	//돌봄 클릭햇을떄 디테일
 	@GetMapping(value = "/detail")
-	public Users dolbomDetail(@RequestParam String userId){
-		return dolbomService.dolbomDetail(userId);
+	public 	List<Object> dolbomDetail(@RequestParam String sitterId){
+		return dolbomService.dolbomDetail(sitterId);
 	}
 }

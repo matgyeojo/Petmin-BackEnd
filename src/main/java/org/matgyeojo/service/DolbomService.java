@@ -7,6 +7,7 @@ import java.util.List;
 import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetProfile;
 import org.matgyeojo.dto.PetsitterProfile;
+import org.matgyeojo.dto.Preference;
 import org.matgyeojo.dto.Review;
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.DolbomRepo;
@@ -36,7 +37,20 @@ public class DolbomService {
 	@Autowired
 	ReviewRepo reviewrepo;
 
-	public List<Object> dolbomFilter(String userSex,int userAge,String sitterHousetype, String petSex,double petWeight,String userAddress){
+	public List<Object> dolbomFilter(String userId,String userAddress){
+		Users u = userrepo.findById(userId).orElse(null);
+		Preference pre =  prerepo.findByUser(u);
+		//String userSex,int userAge,String sitterHousetype, String petSex,double petWeight,String userAddress
+		//선호도 저장
+		String userSex = pre.getPreference1();
+		int userAge = pre.getPreference2();
+		String sitterHousetype = pre.getPreference3();
+		String petSex = pre.getPreference4();
+		String petWeight =pre.getPreference5();
+		if(userAddress.equals("")) {
+			userAddress = u.getUserAddress();
+		}
+		
 		//1.users 테이블 = 성별, 나이
 		//2.sitter테이블 = 집 타입
 		//3.펫 프로필 테이블 = 성별 , 몸무게 (소형견 : 10kg미만,중형견:10~25,대형견 25~)
@@ -44,9 +58,9 @@ public class DolbomService {
 		List<PetsitterProfile> sitters = petsitterrepo.findBySitterHousetypeOrderBySitterUpdateDesc(sitterHousetype);
 		//if로 몸무게 조건걸어서 소중대형견 판별 지금은 예시로 소형견만
 		List <PetProfile> pets = new ArrayList<PetProfile>();
-		if(petWeight<10.00) {
+		if(petWeight.equals("소형견")) {
 			pets = petrepo.findByPetSexAndPetWeightLessThan(petSex, 10.00);
-		}else if(petWeight>=10.00  && petWeight<25.00) {
+		}else if(petWeight.equals("중형견")) {
 			pets = petrepo.findByPetSexAndPetWeightBetween(petSex, 10.00, 25.00);
 		}else {
 			pets= petrepo.findByPetSexAndPetWeightGreaterThan(petSex,25.00);
@@ -112,15 +126,47 @@ public class DolbomService {
 		return result;
 	}
 
-	public Users dolbomDetail(String userId) {
-		Users user = userrepo.findById(userId).orElse(null);
+	//펫시터 자세히보기
+	public 	List<Object> dolbomDetail(String sitterId) {
+		//유저 - userImg,userAddress,userName,userLicence,userAge,userSex
+		//펫시터 - sitterHouse,sitterHousetype,sitterMsg,sitterTem,
+		//펫 -petName,petSex,petMsg,petAge,petNo
+		//리뷰-petsitter,user,reviewMsg
+		Users user = userrepo.findById(sitterId).orElse(null);
 		PetsitterProfile sitter = petsitterrepo.findByUsers(user);
 		List<PetProfile> pets = petrepo.findByUser(user);
 		List<Review> reviews = reviewrepo.findByPetsitter(user);
 		List<Dolbom> dolboms = dolbomrepo.findByUser2(user);
 		
+		//리뷰 평균내기
+		double time= 0;
+		double kind= 0;
+		double delecacy = 0;
+		double allReview = 0;
+		int count =0;
+		for(Review re : reviews) {
+			time+=re.getReviewTime();
+			kind+=re.getReviewKind();
+			delecacy+=re.getReviewDelecacy();
+			count++;
+		}
+		time/=count;kind/=count;delecacy/=count;
+		allReview = (time+kind+delecacy)/3;
+		
+		List<Object> dolList = new ArrayList<>(); 
+		
 		HashMap<String, Object> map = new HashMap<String,Object>() ;
-	
-		return user;
+		map.put("userImg", user.getUserImg());
+		map.put("petsitter",sitter);
+		map.put("pet", pets);
+		map.put("reviewTime", time);
+		map.put("reviewKind", kind);
+		map.put("reviewDelecacy", delecacy);
+		map.put("reviewAll", allReview);
+		
+		
+		dolList.add(map);
+		
+		return dolList;
 	}
 }
