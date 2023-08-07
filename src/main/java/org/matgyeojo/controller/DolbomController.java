@@ -32,4 +32,13 @@ public class DolbomController {
 	public 	List<Object> dolbomDetail(@RequestParam String sitterId){
 		return dolbomService.dolbomDetail(sitterId);
 	}
+	
+	//돌봄 예약
+	@PostMapping(value = "/reservation")
+	public int dolbomReservation(@RequestParam String userId,@RequestParam String sitterId,
+			@RequestParam String scheduleDay,@RequestParam String[] scheduleHour) {
+		return dolbomService.dolbomReservation(userId,sitterId,scheduleDay,scheduleHour);
+	}
+	
+	
 }

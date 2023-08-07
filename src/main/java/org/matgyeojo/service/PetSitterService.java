@@ -152,8 +152,8 @@ public class PetSitterService {
 	}
 	
 	//펫시터 일정 가져오기
-	public List<Object> getSchedure(String userId,String scheduleDay){
-		Users user = userrepo.findById(userId).orElse(null);
+	public List<Object> getSchedure(String sitterId,String scheduleDay){
+		Users user = userrepo.findById(sitterId).orElse(null);
 		List<Dolbom> dols = dolbomrepo.findByUser2AndScheduleDay(user,scheduleDay);
 		List<Object> result = new ArrayList<>();
 		
