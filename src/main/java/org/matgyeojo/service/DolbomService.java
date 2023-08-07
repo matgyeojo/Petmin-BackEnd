@@ -18,6 +18,7 @@ import org.matgyeojo.repository.ReviewRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.extern.java.Log;
 
@@ -168,4 +169,14 @@ public class DolbomService {
 		
 		return dolList;
 	}
+	
+	//돌봄예약
+	public int dolbomReservation(String userId, String sitterId,
+			 String scheduleDay, String[] scheduleHour) {
+		int msg = 0;
+		
+		
+		return msg;
+	}
+	
 }
