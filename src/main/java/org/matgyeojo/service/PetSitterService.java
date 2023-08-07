@@ -121,6 +121,28 @@ public class PetSitterService {
 	public int petsitterScadure(String sitterId, String scheduleDay, String[] scheduleHour, String dolbomOption) {
 		int msg = 0;
 		Users sitter = userrepo.findById(sitterId).orElse(null);
+
+
+		// 그러면 처음 만드는 거 이거나 있는데 값이 안들어 온 것.
+		// 그러면 삭제
+		// 그러면 option값만 변경되며능ㄴ?
+		for (String s : scheduleHour) {
+			List<Dolbom> dols = dolbomrepo.findByUser2AndScheduleDay(sitter, scheduleDay);
+			
+			for (Dolbom dolbom : dols) {
+				//리스트에서 모든 애들중에 돌봄예약 안된애들은 그냥 삭제
+				if ( dolbom.getDolbomStatus().equals(false)) {
+					dolbomrepo.delete(dolbom);
+				}
+				//삭제 안된 애들중에 돌봄 옵션이 일치하지 않으면
+				if (!dolbom.getDolbomOption().equals(dolbomOption)&& dolbom.getDolbomStatus().equals(false)) {
+					dolbom.setDolbomOption(dolbomOption);
+					dolbomrepo.save(dolbom);
+				}
+			}			
+		}
+
+
 		// 가능한 시간을 배열로 입력받아 따로따로 저장
 		for (String s : scheduleHour) {
 			if (dolbomrepo.findByUser2AndScheduleDayAndScheduleHour(sitterId, scheduleDay, s) > 0) {
