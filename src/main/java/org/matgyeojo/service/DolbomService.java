@@ -177,14 +177,16 @@ public class DolbomService {
 	
 	//돌봄예약
 	public int dolbomReservation(String userId, String sitterId,
-			 String scheduleDay, String[] scheduleHour) {
+			 String scheduleDay, String[] scheduleHour,String petName) {
 		int msg = 0;
 		Users sitter = userrepo.findById(sitterId).orElse(null);//펫시터 가져오기
+		PetProfile pet = petrepo.findByPetName(petName);
 		
 		for(String s : scheduleHour) {//스케쥴 시간 포문
 			//돌봄테이블에서 펫시터의 날짜 시간 일치하는거 가져와서 예약되었다고 표시.
 			Dolbom dol = dolbomrepo.findByUser2AndScheduleDayAndScheduleHour(sitter, scheduleDay, s);
 				dol.setDolbomStatus(true);
+				dol.setPetProfile(pet);
 				dolbomrepo.save(dol);
 				msg = 1;
 		}
