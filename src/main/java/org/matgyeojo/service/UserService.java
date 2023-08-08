@@ -23,9 +23,11 @@ public class UserService {
 	public String signup(Users dto) {
 		try {
 			dto.setUserImg("https://petminbucket.s3.ap-northeast-2.amazonaws.com/user/%EC%9C%A0%EC%A0%80.png");
+			dto.setUserLicence("일반");
 			UsersRepo.save(dto);
 			return "회원가입 성공";
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return "회원가입 실패";
 		}
 	}
