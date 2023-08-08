@@ -14,8 +14,6 @@ import org.matgyeojo.repository.PetsitterProfileRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.java.Log;
@@ -138,6 +136,7 @@ public class PetSitterService {
 		int msg = 0;
 		Users sitter = userrepo.findById(sitterId).orElse(null);
 
+
 		// 그러면 처음 만드는 거 이거나 있는데 값이 안들어 온 것.
 		// 그러면 삭제
 		// 그러면 option값만 변경되며능ㄴ?
@@ -156,6 +155,7 @@ public class PetSitterService {
 				}
 			}
 		}
+
 
 		// 가능한 시간을 배열로 입력받아 따로따로 저장
 		for (String s : scheduleHour) {

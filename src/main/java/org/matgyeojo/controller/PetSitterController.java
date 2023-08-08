@@ -1,12 +1,9 @@
 package org.matgyeojo.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
-import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetsitterProfile;
-import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.DolbomRepo;
 import org.matgyeojo.repository.PetProfileRepo;
 import org.matgyeojo.repository.UsersRepo;
