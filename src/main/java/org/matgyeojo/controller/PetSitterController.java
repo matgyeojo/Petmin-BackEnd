@@ -53,12 +53,23 @@ public class PetSitterController {
 			@RequestParam String sitterHousetype, @RequestParam String sitterMsg) {
 		String user_id = null;
 
-			try {
-				user_id = sitterService.petsitterUpdate(userId, sitterHouse, sitterHousetype, sitterMsg);
-			} catch (IOException e) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-			}
-		
+		try {
+			user_id = sitterService.petsitterUpdate(userId, sitterHouse, sitterHousetype, sitterMsg);
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+
+		return ResponseEntity.ok(user_id);
+	}
+
+	// 펫시터 이미지 없이 업데이트
+	@PostMapping(value = "/update2")
+	public ResponseEntity<?> petsitterUpdate2(@RequestParam String userId, @RequestParam String sitterHousetype,
+			@RequestParam String sitterMsg) {
+		String user_id = null;
+
+		user_id = sitterService.petsitterUpdate2(userId, sitterHousetype, sitterMsg);
+
 		return ResponseEntity.ok(user_id);
 	}
 
