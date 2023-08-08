@@ -48,6 +48,8 @@ public class Users {
 	@Column(nullable = true)
 	private String userAddress;//유저주소
 	@Column(nullable = true)
+	private String userDetailAddress;//유저주소
+	@Column(nullable = true)
 	private String userSex;//유저성별
 	@Column(nullable = true,unique = true)
 	private String userCard;//유저카드번호
