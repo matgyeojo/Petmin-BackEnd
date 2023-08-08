@@ -54,6 +54,8 @@ public class Users {
 	private String userImg;// 유저 사진
 	@Column(nullable = true)
 	private String userLicence;
+	@Column(nullable = true)
+	private String userEmail;
 	@UpdateTimestamp
 	private Timestamp userUpdateTime;// 유저마지막업데이트날짜
 
