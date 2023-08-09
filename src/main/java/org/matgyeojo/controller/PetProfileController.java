@@ -1,5 +1,6 @@
 package org.matgyeojo.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,23 +11,41 @@ import org.matgyeojo.dto.Users;
 import org.matgyeojo.service.PetProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class PetProfileController {
 	@Autowired
 	PetProfileService PetProfileService;
 	
 	//반려동물 등록 페이지 : 반려동물 정보 Pet profile 테이블에 저장
-	@PostMapping("/petProfileSave/{userId}")
-	public ResponseEntity<String> petprofileSave(@RequestBody PetProfile dto, @PathVariable String userId) {
-		String message = PetProfileService.petprofileSave(dto, userId);
+	@PostMapping("/petProfileSave")
+	public ResponseEntity<String> petprofileSave(
+			@RequestParam String userId, 
+			@RequestParam String petName, 
+			@RequestParam int petAge,
+			@RequestParam String petSpecies,
+			@RequestParam double petWeight,
+			@RequestParam String petSex,
+			@RequestParam MultipartFile petImg,
+			@RequestParam String petMsg
+			) {
+		String message = null;
+		try {
+			message = PetProfileService.petprofileSave(userId, petName, petAge, petSpecies, petWeight, petSex, petImg, petMsg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return ResponseEntity.ok(message);
 		
 	}
