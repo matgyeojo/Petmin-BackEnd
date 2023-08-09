@@ -215,4 +215,14 @@ public class PetSitterService {
 		return result;
 	}
 
+	//펫시터 실버라이센스
+	public String petsitterSilverLicence(String userId, int score) {
+		Users user = userrepo.findById(userId).orElse(null);
+		if(score>=3) {
+			user.setUserLicence("실버");
+			userrepo.save(user);
+		}
+		return user.getUserLicence();
+	}
+
 }
