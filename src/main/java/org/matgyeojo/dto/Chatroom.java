@@ -25,23 +25,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = { "chats", "receiver", "sender" })
 @Entity
 @Table(name = "CHATROOM")
 public class Chatroom {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long chatroomId; // 채팅방 번호
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   private Long chatroomId; // 채팅방 번호
 
-	@ManyToOne
-	@JoinColumn(name = "sender_id")
-	private Users sender; // 보내는 사람
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "sender_id")
+   private Users sender; // 보내는 사람
 
-	@ManyToOne
-	@JoinColumn(name = "receiver_id")
-	private Users receiver; // 받는 사람
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "receiver_id")
+   private Users receiver; // 받는 사람
 
-	@OneToMany(mappedBy = "chatroom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonIgnore
-	private List<Chat> chats;
+   @OneToMany(mappedBy = "chatroom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @JsonIgnore
+   private List<Chat> chats;
 }

@@ -89,6 +89,31 @@ public class PetSitterService {
 		return sitter.getUserId();
 	}
 
+	// 펫시터프로필 이미지 없을 때
+	public String petsitterUpdate2(String userId, String house, String sitterHousetype, String sitterMsg) {
+		Users user = userrepo.findById(userId).orElse(null);
+		// 펫시터 프로필 업데이트
+		PetsitterProfile sitter = petsitterrepo.findByUsers(user);
+
+		String houses = house.substring(0, house.length());
+		String[] ho = houses.split(",");
+
+		String newhouse = "[";
+		for (String h : ho) {
+			newhouse += h + ",";
+		}
+		newhouse = newhouse.substring(0, newhouse.length() - 1);
+		newhouse += "]";
+
+		sitter.setSitterHouse(newhouse);
+		sitter.setSitterHousetype(sitterHousetype);
+		sitter.setSitterMsg(sitterMsg);
+
+		petsitterrepo.save(sitter);
+
+		return sitter.getUserId();
+	}
+
 	// 펫시터프로필 생성
 	public String petsitterInsert(String userId, String sitterHousetype, String sitterMsg) {
 		String msg = "실패";
@@ -122,26 +147,24 @@ public class PetSitterService {
 		int msg = 0;
 		Users sitter = userrepo.findById(sitterId).orElse(null);
 
-
 		// 그러면 처음 만드는 거 이거나 있는데 값이 안들어 온 것.
 		// 그러면 삭제
 		// 그러면 option값만 변경되며능ㄴ?
 		for (String s : scheduleHour) {
 			List<Dolbom> dols = dolbomrepo.findByUser2AndScheduleDay(sitter, scheduleDay);
-			
+
 			for (Dolbom dolbom : dols) {
-				//리스트에서 모든 애들중에 돌봄예약 안된애들은 그냥 삭제
-				if ( dolbom.getDolbomStatus().equals(false)) {
+				// 리스트에서 모든 애들중에 돌봄예약 안된애들은 그냥 삭제
+				if (dolbom.getDolbomStatus().equals(false)) {
 					dolbomrepo.delete(dolbom);
 				}
-				//삭제 안된 애들중에 돌봄 옵션이 일치하지 않으면
-				if (!dolbom.getDolbomOption().equals(dolbomOption)&& dolbom.getDolbomStatus().equals(false)) {
+				// 삭제 안된 애들중에 돌봄 옵션이 일치하지 않으면
+				if (!dolbom.getDolbomOption().equals(dolbomOption) && dolbom.getDolbomStatus().equals(false)) {
 					dolbom.setDolbomOption(dolbomOption);
 					dolbomrepo.save(dolbom);
 				}
-			}			
+			}
 		}
-
 
 		// 가능한 시간을 배열로 입력받아 따로따로 저장
 		for (String s : scheduleHour) {

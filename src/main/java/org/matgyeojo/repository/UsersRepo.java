@@ -11,7 +11,7 @@ public interface UsersRepo extends CrudRepository<Users, String> {
 	boolean existsByUserId(String userId);
 
 	// 유저 성별 나이 주소 필터링
-	public List<Users> findByUserSexAndUserAgeGreaterThanEqualAndUserAddressStartingWith(String userSex, int userAge,
+	public List<Users> findByUserSexAndUserAgeGreaterThanEqualAndUserAddressContaining(String userSex, int userAge,
 			String userAddress);
 
 	Optional<Users> findById(String userId);

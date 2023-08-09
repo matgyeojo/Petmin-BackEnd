@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.matgyeojo.service.PetService;
 import org.matgyeojo.service.S3Uploader;
-import org.matgyeojo.service.S3Uploader2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +24,6 @@ public class PetController {
 	PetService petService;
 	@Autowired
 	S3Uploader s3Uploader;
-	@Autowired
-	S3Uploader2 s3Uploader2;
-	
 	
 	@PostMapping(value = "/insert")
 	public ResponseEntity<?> petInsert(@RequestParam String userId,@RequestParam String petName,@RequestParam MultipartFile[] petImgs ) {
