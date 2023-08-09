@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -46,7 +47,7 @@ public class Users {
 	@Column(nullable = true)
 	private String userSex;// 유저성별
 	@Column(nullable = true)
-	private String userDetailAddress; // 유저 상세주소
+	private String userDetailAddress; // 유저 상세주소	
 	@Column(nullable = true,unique = true)
 	private String userCard;//유저카드번호
 	private Integer userCardpass;// 유저카드비밀번호
@@ -63,48 +64,47 @@ public class Users {
 	@JsonIgnore
 	private PetsitterProfile petsitterProfile;
 
-	// 연관관계설정:1:n
-	// mappedBy
-	// 채팅방
-	@OneToMany(mappedBy = "sender")
-	@JsonIgnore
-	private List<Chatroom> sentChatrooms; // 변경된 이름
-
-	@OneToMany(mappedBy = "receiver")
-	@JsonIgnore
-	private List<Chatroom> receivedChatrooms; // 변경된 이름
+	   // 연관관계설정:1:n
+	   // mappedBy
+	   // 채팅방
+	   @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
+	   @JsonIgnore
+	   private List<Chatroom> sentChatrooms; // 변경된 이름
+	   @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
+	   @JsonIgnore
+	   private List<Chatroom> receivedChatrooms; // 변경된 이름
 
 	// 선호필터
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Preference> preferences;
 	// 알람
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Alarm> alarms;
 	// 채팅
-	@OneToMany(mappedBy = "startId")
+	@OneToMany(mappedBy = "startId", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Chat> chatStarts;
-	@OneToMany(mappedBy = "endId")
+	@OneToMany(mappedBy = "endId", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Chat> chatEnds;
 	// 펫 프로필
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<PetProfile> petProfiles;
 	// 즐겨찾기
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<PetSub> users;
-	@OneToMany(mappedBy = "sitter")
+	@OneToMany(mappedBy = "sitter", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<PetSub> sitters;
 	// 돌봄
-	@OneToMany(mappedBy = "user1") // 사용자
+	@OneToMany(mappedBy = "user1", fetch = FetchType.LAZY) // 사용자
 	@JsonIgnore
 	private List<Dolbom> dolbom1;
-	@OneToMany(mappedBy = "user2") // 펫시터
+	@OneToMany(mappedBy = "user2", fetch = FetchType.LAZY) // 펫시터
 	@JsonIgnore
 	private List<Dolbom> dolbom2;
 

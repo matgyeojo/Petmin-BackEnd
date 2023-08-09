@@ -9,6 +9,7 @@ import org.matgyeojo.repository.PreferenceRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -48,16 +49,27 @@ public class UserService {
 	}
 
 	// 개인정보 수정 - 주소, 사진
-	public Users updateInfo(Users users, MultipartFile userImg) throws IOException {
-		Users user = UsersRepo.findById(users.getUserId()).orElse(null);
+	public Users updateInfoAll(String userId, String userAddress,
+				 String userDetailAddress,  MultipartFile userImg) throws IOException {
+		Users user = UsersRepo.findById(userId).orElse(null);
 
 		if (userImg != null && !userImg.isEmpty()) {
 			String sotredFileName = s3uploader.upload(userImg, "user");
 			user.setUserImg(sotredFileName);
 		}
-		user.setUserAddress(users.getUserAddress());
+		user.setUserAddress(userAddress);
+		user.setUserDetailAddress(userDetailAddress); 
 		UsersRepo.save(user);
 		return user;
+	}
+	
+	// 개인정보 수정 - 주소
+	public Users updateInfo(Users user) {
+		Users users = UsersRepo.findById(user.getUserId()).orElse(null);
+		users.setUserAddress(user.getUserAddress());
+		users.setUserDetailAddress(user.getUserDetailAddress()); 	
+		UsersRepo.save(users);
+		return users;
 	}
 
 	// 유저 정보 얻기

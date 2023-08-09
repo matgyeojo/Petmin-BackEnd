@@ -32,36 +32,35 @@ import lombok.ToString;
 @Entity
 @Table(name = "CHAT")
 public class Chat {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long chatId; // 채팅내용 시퀀스
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long chatId; // 채팅내용 시퀀스
 
-	// 채팅방 시퀀스 FK
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "chatroom_no")
-	@JsonIgnore
-	private Chatroom chatroom; // 채팅방
+   // 채팅방 시퀀스 FK
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "chatroom_no")
+   @JsonIgnore
+   private Chatroom chatroom; // 채팅방
 
-	// 보내는 사람
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "start_id")
-	@JsonIgnore
-	private Users startId;
+   // 보내는 사람
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "start_id")
+   private Users startId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "end_id")
-	@JsonIgnore
-	private Users endId;
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "end_id")
+   @JsonIgnore
+   private Users endId;
 
-	@Column(nullable = false)
-	private String chatMsg; // 채팅 내용
+   @Column(nullable = false)
+   private String msg; // 채팅 내용
 
-	@Column(nullable = true)
-	private String chatImg; // 채팅 이미지
+   @Column(nullable = true)
+   private String chatImg; // 채팅 이미지
 
-	@CreationTimestamp
-	private Timestamp chatDate; // 채팅 보낸 날짜
+   @CreationTimestamp
+   private Timestamp chatDate; // 채팅 보낸 날짜
 
-	@Column(nullable = false)
-	private Boolean chatCheck = false; // 채팅 읽었나요
+   @Column(nullable = true)
+   private Boolean chatCheck = false; // 채팅 읽었나요
 }

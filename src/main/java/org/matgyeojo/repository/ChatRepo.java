@@ -8,7 +8,9 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ChatRepo extends CrudRepository<Chat, Long> {
 
-	// 채팅방을 chatroomId기준으로 채팅 내역을 가져오고 chatDate로 정렬합니다.
-	List<Chat> findByChatroomOrderByChatDate(Chatroom chatroom);
+   // 채팅방을 chatroomId기준으로 채팅 내역을 가져오고 chatDate로 정렬합니다.
+   List<Chat> findByChatroomOrderByChatDate(Chatroom chatroom);
+   
+   List<Chat> findByChatroom_chatroomId(Long room);
 
 }
