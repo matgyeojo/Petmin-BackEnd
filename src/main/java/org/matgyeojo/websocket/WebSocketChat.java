@@ -47,6 +47,7 @@ public class WebSocketChat {
 
    @OnOpen // 클라이언트가 접속할 때 마다 실행
    public void onOpen(Session session, @PathParam("room") String chatroomId) {
+
       // DB에서 과거 채팅 내역을 client에게 보내준다.
       System.out.println(chatroomId);
       Long room = Long.parseLong(chatroomId);
@@ -58,26 +59,31 @@ public class WebSocketChat {
       if (clients.containsKey(room)) {
          // 이미 연결된 세션이 있을 경우 새로운 세션만 추가
          clients.get(room).add(session);
+         List<Chat> existingMessages = chatRepo.findByChatroom_chatroomId(room);
+         for (Chat existingMessage : existingMessages) {
+            existingMessage.setChatCheck(true);
+            chatRepo.save(existingMessage);
+         }
+
       } else {
          // 연결된 세션이 없을 경우 새로운 Set을 생성하고 세션을 추가
          Set<Session> uniqueSessions = new HashSet<>();
          uniqueSessions.add(session);
          clients.put(room, uniqueSessions);
-         System.out.println("clients: " + clients);
       }
    }
 
    @OnMessage // 메세지 수신 시
    public void onMessage(String message, Session session) throws IOException {
+      System.out.println(session);
       ObjectMapper mapper = new ObjectMapper();
       JsonNode jsonNode = mapper.readTree(message);
       String msg = jsonNode.get("msg").asText();
       String startIdString = jsonNode.get("startId").asText();
       String receiverId = jsonNode.get("receiverId").asText();
 //      String chatImgUrl = jsonNode.get("chatImgUrl").asText();
-      Long chatroomId = jsonNode.get("chatroomId").asLong(); // 프론트엔드에서 전달해야 함
-      System.out.println("chatroomId:" + chatroomId);
-      System.out.println("msg:" + msg);
+      Long chatroomId = jsonNode.get("chatroomId").asLong();
+
       Chatroom chatroom = chatroomRepo.findById(chatroomId).orElse(null);
       System.out.println(chatroom); ///
       if (chatroom == null) {
@@ -103,19 +109,25 @@ public class WebSocketChat {
 //            .chatImg(chatImgUrl)
             .build();
 
-      chatRepo.save(chat);
-
       // 방에 참여 중인 모든 클라이언트들에게 메시지를 보낸다.
       logger.info("receive message : {}", message);
 
       Set<Session> uniqueSessions = new HashSet<>(clients.get(chatroomId));
-      for (Session s : uniqueSessions) {
-         System.out.println("데이터 전송시작");
-         logger.info("메세지 : test send data : {}", message);
-         System.out.println("메세지 : " + message);
-         s.getBasicRemote().sendText(message);
-         System.out.println("데이터 전송완료");
+      System.out.println(uniqueSessions.size());
+      if (uniqueSessions.size() == 1) {
+         System.out.println("null");
+         chat.setChatCheck(false);
+      } else {
+         for (Session s : uniqueSessions) {
+            System.out.println("데이터 전송시작");
+            logger.info("메세지 : test send data : {}", message);
+            System.out.println("메세지 : " + message);
+            s.getBasicRemote().sendText(message);
+            System.out.println("데이터 전송완료");
+         }
+         chat.setChatCheck(true);
       }
+      chatRepo.save(chat);
    }
 
    @OnClose // 클라이언트가 접속을 종료할 시
