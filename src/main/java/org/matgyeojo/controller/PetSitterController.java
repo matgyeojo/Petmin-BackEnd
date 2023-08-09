@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,6 +71,13 @@ public class PetSitterController {
 		return ResponseEntity.ok(user_id);
 	}
 
+	//펫시터 실버등급업
+	@PostMapping(value = "/licence")
+	public String petsitterSilverLicence(@RequestParam String userId,@RequestParam int score) {
+		
+		return sitterService.petsitterSilverLicence(userId,score);
+	}
+	
 	// 펫시터 생성
 	@PostMapping(value = "/insert")
 	public ResponseEntity<?> petsitterInsert(@RequestParam String userId, @RequestParam MultipartFile[] sitterHouse,
