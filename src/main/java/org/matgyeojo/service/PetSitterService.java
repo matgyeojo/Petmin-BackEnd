@@ -88,31 +88,31 @@ public class PetSitterService {
 
 		return sitter.getUserId();
 	}
-	
+
 	// 펫시터프로필 이미지 없을 때
-		public String petsitterUpdate2(String userId,String house , String sitterHousetype, String sitterMsg) {
-			Users user = userrepo.findById(userId).orElse(null);
-			// 펫시터 프로필 업데이트
-			PetsitterProfile sitter = petsitterrepo.findByUsers(user);
-			String houses = sitter.getSitterHouse();
-			houses = house.substring(0,house.length());
-			String[] ho = houses.split(",");
-			
-			String newhouse = "[";
-			for(String h : ho) {
-				newhouse+=h+",";
-			}
-			newhouse=newhouse.substring(0,newhouse.length()-1);
-			newhouse+="]";
-			
-			sitter.setSitterHouse(newhouse);
-			sitter.setSitterHousetype(sitterHousetype);
-			sitter.setSitterMsg(sitterMsg);
+	public String petsitterUpdate2(String userId, String house, String sitterHousetype, String sitterMsg) {
+		Users user = userrepo.findById(userId).orElse(null);
+		// 펫시터 프로필 업데이트
+		PetsitterProfile sitter = petsitterrepo.findByUsers(user);
 
-			petsitterrepo.save(sitter);
+		String houses = house.substring(0, house.length());
+		String[] ho = houses.split(",");
 
-			return sitter.getUserId();
+		String newhouse = "[";
+		for (String h : ho) {
+			newhouse += h + ",";
 		}
+		newhouse = newhouse.substring(0, newhouse.length() - 1);
+		newhouse += "]";
+
+		sitter.setSitterHouse(newhouse);
+		sitter.setSitterHousetype(sitterHousetype);
+		sitter.setSitterMsg(sitterMsg);
+
+		petsitterrepo.save(sitter);
+
+		return sitter.getUserId();
+	}
 
 	// 펫시터프로필 생성
 	public String petsitterInsert(String userId, String sitterHousetype, String sitterMsg) {
@@ -142,12 +142,10 @@ public class PetSitterService {
 		return msg;
 	}
 
-	
 	// 펫시터 스케쥴 저장
 	public int petsitterScadure(String sitterId, String scheduleDay, String[] scheduleHour, String dolbomOption) {
 		int msg = 0;
 		Users sitter = userrepo.findById(sitterId).orElse(null);
-
 
 		// 그러면 처음 만드는 거 이거나 있는데 값이 안들어 온 것.
 		// 그러면 삭제
@@ -167,7 +165,6 @@ public class PetSitterService {
 				}
 			}
 		}
-
 
 		// 가능한 시간을 배열로 입력받아 따로따로 저장
 		for (String s : scheduleHour) {
