@@ -101,6 +101,10 @@ public class DolbomService {
 		//List에 map을 저장
 		List<Object> result = new ArrayList<>();
 		
+		List<String> options  = new ArrayList<>();
+		List<String> days = new ArrayList<>();
+		
+		
 		for(String fil : filter4) {
 			//필요한 정보들만 추출
 			HashMap<String, Object> map = new HashMap<>();
@@ -109,23 +113,40 @@ public class DolbomService {
 			
 			//프론트에서 필터링하는데 필요한 부분
 			List<Dolbom> dol = dolbomrepo.findByUser2(user);
-			String day="";
-			String option="";
+		
 			for(Dolbom d : dol) {
-			day = day+d.getScheduleDay()+",";
-			option = option+d.getDolbomOption()+",";	
-			}
-			if(day.length()>2) {// 쉼표 없애주기
-				day = day.substring(0,day.length()-1);
-				option = option.substring(0,option.length()-1);
+				int count1 = 0;//옵션 일치하는지
+				int count2 = 0;
+				for(String op : options) {//옵션 가져오기
+					if(d.getDolbomOption().equals(op)) {
+						count1++;
+					}
+				}
+				if(count1==0) {//일치하는게 없으면
+					options.add(d.getDolbomOption());
+					
+				}else {
+					count1=0;
+				}
+				
+				for(String da:days) {//날짜 가져오기
+					if(d.getScheduleDay().equals(da)) {
+						count2++;
+					}
+				}
+				if(count2==0) {//일치하는게 없으면 추가
+					days.add(d.getScheduleDay());
+				}else {
+					count2=0;
+				}
 			}
 			map.put("userName",user.getUserName());
 			map.put("userAddress",user.getUserAddress());
 			map.put("sitterHouse", sitter.getSitterHouse());
 			map.put("sitterMsg", sitter.getSitterMsg());
 			map.put("sitterTem", sitter.getSitterTem());
-			map.put("scheduleDay",day);
-			map.put("dolbomOption", option);
+			map.put("scheduleDay",days);
+			map.put("dolbomOption", options);
 			result.add(map);
 		}
 		
