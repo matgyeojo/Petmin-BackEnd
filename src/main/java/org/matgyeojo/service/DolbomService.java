@@ -57,7 +57,7 @@ public class DolbomService {
 		//2.sitter테이블 = 집 타입
 		//3.펫 프로필 테이블 = 성별 , 몸무게 (소형견 : 10kg미만,중형견:10~25,대형견 25~)
 		//성별,나이,사는곳
-		List<Users> users = userrepo.findByUserSexAndUserAgeGreaterThanEqualAndUserAddressStartingWith(userSex, userAge,userAddress);
+		List<Users> users = userrepo.findByUserSexAndUserAgeGreaterThanEqualAndUserAddressContaining(userSex, userAge,userAddress);
 		//집 타입
 		List<PetsitterProfile> sitters = petsitterrepo.findBySitterHousetypeOrderBySitterUpdateDesc(sitterHousetype);
 		//if로 몸무게 조건걸어서 소중대형견 판별 지금은 예시로 소형견만

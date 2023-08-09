@@ -39,7 +39,7 @@ public class JmTest {
 	ReviewRepo rerepo;
 
 	// 리뷰입력
-	@Test
+//	@Test
 	void reInsert() {
 		Users user = userrepo.findById("지만").orElse(null);
 		Users sitter = userrepo.findById("지만2").orElse(null);
@@ -66,7 +66,7 @@ public class JmTest {
 		// 1.users 테이블 = 성별, 나이,주소
 		// 2.sitter테이블 = 집 타입
 		// 3.펫 프로필 테이블 = 성별 , 몸무게 (소형견 : 10kg미만,중형견:10~25,대형견 25~)
-		List<Users> users = userrepo.findByUserSexAndUserAgeGreaterThanEqualAndUserAddressStartingWith("남", 20,
+		List<Users> users = userrepo.findByUserSexAndUserAgeGreaterThanEqualAndUserAddressContaining("남", 20,
 				"경기도 고양시");
 		List<PetsitterProfile> sitters = petsitterrepo.findBySitterHousetypeOrderBySitterUpdateDesc("아파트");
 		// if로 몸무게 조건걸어서 소중대형견 판별 지금은 예시로 소형견만
@@ -172,13 +172,12 @@ public class JmTest {
 
 		PetProfile pet = PetProfile.builder().petName("자몽").petAge(6).petSpecies("포메라니안").petWeight(6.17).petSex("남아")
 				.user(user).build();
-
+		
 		PetProfile pet2 = petrepo.save(pet);
 //		pet2.setUser(user);
 
 		petrepo.save(pet2);
 	}
-
 	// 펫시터 수정
 	// @Test
 	void petsitterUpdate() {
@@ -200,7 +199,7 @@ public class JmTest {
 	}
 
 	// 유저입력
-	// @Test
+	 //@Test
 	void userInsert() {
 		Users u1 = Users.builder().userId("지만").userPass("1234").userAge(25).userAddress("경기도 일산동구").userSex("남")
 				.userName("지만").userLicence("실버펫시터").build();
