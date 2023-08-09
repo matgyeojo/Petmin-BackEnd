@@ -66,7 +66,7 @@ public class Dolbom {
 	@Column(nullable = false)
 	private String scheduleHour;// 펫시터 가능한 시간
 	@Column(nullable = true)
-	private Boolean dolbomStatus;// 예약여부
+	private int dolbomStatus;// 예약여부
 	@Column(nullable = true)
 	private String dolbomOption;// 돌봄 종류
 	

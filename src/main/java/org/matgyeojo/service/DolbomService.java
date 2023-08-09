@@ -246,7 +246,7 @@ public class DolbomService {
 		for (String s : scheduleHour) {// 스케쥴 시간 포문
 			// 돌봄테이블에서 펫시터의 날짜 시간 일치하는거 가져와서 예약되었다고 표시.
 			Dolbom dol = dolbomrepo.findByUser2AndScheduleDayAndScheduleHour(sitter, scheduleDay, s);
-			dol.setDolbomStatus(true);
+			dol.setDolbomStatus(2); //0->안된거 1-> 된거 2->대기
 			dol.setPetProfile(pet);
 			dolbomrepo.save(dol);
 			msg = 1;
