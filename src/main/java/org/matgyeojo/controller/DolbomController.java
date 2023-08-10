@@ -40,5 +40,10 @@ public class DolbomController {
 		return dolbomService.dolbomReservation(userId,sitterId,scheduleDay,scheduleHour,petName);
 	}
 	
+	//돌봄 체크
+	@GetMapping(value = "/checkSitter")
+	public List<Object> dolbomCheckPetsitter(@RequestParam String userId){
+		return dolbomService.dolbomCheckPetsitter(userId);
+	}
 	
 }
