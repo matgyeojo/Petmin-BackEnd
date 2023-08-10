@@ -65,10 +65,9 @@ public class PetProfileController {
 	}
 	
 	//해당 아이디의 반려동물 리스트(주인과 다른 사람이 볼 때 동일)
-	@GetMapping(value = "/petProfileList")
-	public List<PetProfile> petProfileList(@RequestParam("userId") Users user) {
-		System.out.println(user);
-		return PetProfileService.petProfileList(user);
+	@GetMapping(value = "/petProfileList/{userId}")
+	public List<PetProfile> petProfileList(@PathVariable String userId) {
+		return PetProfileService.petProfileList(userId);
 	}
 	
 	//각각의 반려동물 프로필 조회 (주인은 조회 + 수정이 가능한 페이지 / 다른 사람은 조회만 가능하게 프론트에서 나누면 될 듯)

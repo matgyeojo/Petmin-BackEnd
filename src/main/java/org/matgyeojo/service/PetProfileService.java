@@ -98,8 +98,8 @@ public class PetProfileService {
 		}
 	}
 
-	public List<PetProfile> petProfileList(Users user) {
-		System.out.println(user);
+	public List<PetProfile> petProfileList(String userId) {
+		Users user = UsersRepo.findById(userId).orElse(null);
 		return PetProfileRepo.findByUser(user);
 	}
 
