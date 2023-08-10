@@ -1,12 +1,11 @@
 package org.matgyeojo.websocket;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -28,11 +27,12 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 @ServerEndpoint(value = "/socket/chatt/{room}", configurator = ServerEndpointConfigurator.class)
 public class WebSocketChat {
-   private static Map<Long, Set<Session>> clients = Collections.synchronizedMap(new HashMap<>());
+   private static Map<Long, Set<Session>> clients = new ConcurrentHashMap<>();
 
    private static Logger logger = LoggerFactory.getLogger(WebSocketChat.class);
 
@@ -70,10 +70,15 @@ public class WebSocketChat {
          Set<Session> uniqueSessions = new HashSet<>();
          uniqueSessions.add(session);
          clients.put(room, uniqueSessions);
+         List<Chat> existingMessages = chatRepo.findByChatroom_chatroomId(room);
+         for (Chat existingMessage : existingMessages) {
+            existingMessage.setChatCheck(true);
+            chatRepo.save(existingMessage);
+         }
       }
    }
 
-   @OnMessage // 메세지 수신 시
+   @OnMessage // 메세지 수신 시 //{}
    public void onMessage(String message, Session session) throws IOException {
       System.out.println(session);
       ObjectMapper mapper = new ObjectMapper();
@@ -113,27 +118,45 @@ public class WebSocketChat {
       logger.info("receive message : {}", message);
 
       Set<Session> uniqueSessions = new HashSet<>(clients.get(chatroomId));
-      System.out.println(uniqueSessions.size());
+      System.out.println("uniqueSessions:" + uniqueSessions);
+
       if (uniqueSessions.size() == 1) {
          System.out.println("null");
          chat.setChatCheck(false);
       } else {
-         for (Session s : uniqueSessions) {
-            System.out.println("데이터 전송시작");
-            logger.info("메세지 : test send data : {}", message);
-            System.out.println("메세지 : " + message);
-            s.getBasicRemote().sendText(message);
-            System.out.println("데이터 전송완료");
-         }
+
+          System.out.println("2");
          chat.setChatCheck(true);
       }
+
+      ((ObjectNode) jsonNode).put("chatcheck", chat.getChatCheck());
+      message = jsonNode.toString();
+      System.out.println(message);
+
+      for (Session s : uniqueSessions) {
+         System.out.println("데이터 전송시작");
+         logger.info("메세지 : test send data : {}", message);
+         System.out.println("메세지 : " + message);
+         s.getBasicRemote().sendText(message);
+         System.out.println("데이터 전송완료");
+      }
+
       chatRepo.save(chat);
    }
 
    @OnClose // 클라이언트가 접속을 종료할 시
    public void onClose(Session session, @PathParam("room") Integer chatroomNo) {
-      logger.info("session close : {}", session);
+      logger.info("!!!!session close : {}", session);
       Long room = chatroomNo.longValue();
-      clients.remove(room);
+
+      // 제대로 초기화된 clients 컬렉션에서 세션 제거
+      System.out.println("clients:" + clients);
+      if (clients.get(room).size() == 1) {
+         System.out.println("방닫음");
+         clients.remove(room);
+      } else {
+         System.out.println("session지우기:" + session);
+         clients.get(room).remove(session);
+      }
    }
 }
