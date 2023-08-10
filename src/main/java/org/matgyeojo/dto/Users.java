@@ -47,7 +47,7 @@ public class Users {
 	@Column(nullable = true)
 	private String userSex;// 유저성별
 	@Column(nullable = true)
-	private String userDetailAddress; // 유저 상세주소
+	private String userDetailAddress; // 유저 상세주소	
 	@Column(nullable = true,unique = true)
 	private String userCard;//유저카드번호
 	private Integer userCardpass;// 유저카드비밀번호

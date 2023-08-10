@@ -155,11 +155,11 @@ public class PetSitterService {
 
 			for (Dolbom dolbom : dols) {
 				// 리스트에서 모든 애들중에 돌봄예약 안된애들은 그냥 삭제
-				if (dolbom.getDolbomStatus().equals(false)) {
+				if (dolbom.getDolbomStatus()==0) {
 					dolbomrepo.delete(dolbom);
 				}
 				// 삭제 안된 애들중에 돌봄 옵션이 일치하지 않으면
-				if (!dolbom.getDolbomOption().equals(dolbomOption) && dolbom.getDolbomStatus().equals(false)) {
+				if (!dolbom.getDolbomOption().equals(dolbomOption) && dolbom.getDolbomStatus()==0) {
 					dolbom.setDolbomOption(dolbomOption);
 					dolbomrepo.save(dolbom);
 				}
@@ -172,7 +172,7 @@ public class PetSitterService {
 				continue;
 			}
 
-			Dolbom dol = Dolbom.builder().user2(sitter).scheduleDay(scheduleDay).scheduleHour(s).dolbomStatus(false)
+			Dolbom dol = Dolbom.builder().user2(sitter).scheduleDay(scheduleDay).scheduleHour(s).dolbomStatus(0)
 					.dolbomOption(dolbomOption).build();
 			dolbomrepo.save(dol);
 		}
@@ -206,7 +206,7 @@ public class PetSitterService {
 			map.put("dolbomOption", dol.getDolbomOption());
 
 			HashMap<String, Object> map2 = new HashMap<>();
-			map2.put("Hour2", dol.getScheduleHour());
+			map2.put("Hour2", dol.getScheduleHour());//그시간에 어떤상태인지
 			map2.put("dolbomStatus", dol.getDolbomStatus());
 			map.put("Hour", map2);
 			result.add(map);

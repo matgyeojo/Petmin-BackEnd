@@ -8,17 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.matgyeojo.dto.Chat;
 import org.matgyeojo.dto.Chatroom;
-import org.matgyeojo.dto.MarkAsRead;
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.ChatRepo;
 import org.matgyeojo.repository.ChatroomRepo;
 import org.matgyeojo.repository.UsersRepo;
-import org.matgyeojo.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +30,6 @@ public class ChatController {
 
    @Autowired
    UsersRepo usersRepo;
-
-   @Autowired
-   private ChatService chatService;
 
 //   @GetMapping(value = { "/consult/chartoom" })
 //   public <T> T adminEnterChatRoom(HttpServletRequest request) {
@@ -101,12 +93,4 @@ public class ChatController {
 
       return chatroom;
    }
-
-   // 읽음여부 확인 및 수정
-   @PostMapping("/checkread")
-   public ResponseEntity<String> markAsRead(@RequestBody MarkAsRead request) {
-      chatService.markAsRead(request.getChatId());
-      return ResponseEntity.ok("Marked as read.");
-   }
-
 }

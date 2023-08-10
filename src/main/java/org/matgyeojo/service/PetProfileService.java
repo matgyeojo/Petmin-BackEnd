@@ -1,5 +1,6 @@
 package org.matgyeojo.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import org.matgyeojo.repository.PetVaccineRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class PetProfileService {
@@ -28,15 +31,45 @@ public class PetProfileService {
 	@Autowired
 	PetVaccineRepo PetVaccineRepo;
 	
-	public String petprofileSave(PetProfile dto, String userId) {
+	@Autowired
+	S3Uploader s3uploader;
+	
+	public String petprofileSave(String userId, 
+			 String petName, 
+			 int petAge,
+			 String petSpecies,
+			 double petWeight,
+			 String petSex,
+			 MultipartFile petImg,
+			 String petMsg) throws IOException {
+		
 		Users user = UsersRepo.findById(userId).orElse(null);
+		
 		if(user != null) {
-			dto.setUser(user);
-			PetProfileRepo.save(dto);
+			String image_list = "";
+
+			
+			if (petImg != null && !petImg.isEmpty()) {
+				String sotredFileName = s3uploader.upload(petImg, "pet");
+				image_list += (sotredFileName);
+			}
+		
+		PetProfile pet = PetProfile.builder()
+				.petName(petName)
+				.petAge(petAge)
+				.petSpecies(petSpecies)
+				.petWeight(petWeight)
+				.petSex(petSex)
+				.user(user)
+				.petImg(image_list)
+				.build();
+			PetProfileRepo.save(pet);
+			
 			return "펫 프로필 저장 성공";
 		} else {
 			return "펫 프로필 저장 실패";
-		}	
+		}
+		
 	}
 	
 	public String petTendencySave(PetTendency dto, Integer petNo) {
