@@ -46,8 +46,11 @@ public interface PetProfileRepo extends CrudRepository<PetProfile, Integer> {
 
 	// 해당 아이디의 반려견 프로필 정보 불러오기
 	public List<PetProfile> findByUser(Users user);
+<<<<<<< HEAD
+=======
 
 	//유저의 펫 한마리
 	public PetProfile findByUserAndPetName(Users user,String petName);
 	
+>>>>>>> 08565ffbaa72446ded9351536e8cb0bcf515d010
 }
