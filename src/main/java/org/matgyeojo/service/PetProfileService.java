@@ -99,6 +99,7 @@ public class PetProfileService {
 	}
 
 	public List<PetProfile> petProfileList(Users user) {
+		System.out.println(user);
 		return PetProfileRepo.findByUser(user);
 	}
 

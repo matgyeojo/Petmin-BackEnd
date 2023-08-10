@@ -65,8 +65,9 @@ public class PetProfileController {
 	}
 	
 	//해당 아이디의 반려동물 리스트(주인과 다른 사람이 볼 때 동일)
-	@GetMapping(value = "/petProfileList", consumes = "application/json")
-	public List<PetProfile> petProfileList(@RequestBody Users user) {
+	@GetMapping(value = "/petProfileList")
+	public List<PetProfile> petProfileList(@RequestParam("userId") Users user) {
+		System.out.println(user);
 		return PetProfileService.petProfileList(user);
 	}
 	
