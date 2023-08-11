@@ -16,7 +16,7 @@ public interface ScheduleRepo extends CrudRepository<Schedule, Integer>{
 		public int findByUserAndScheduleDayAndScheduleHour(String SitterId,String scheduleDay,String scheduleHour);
 		//사용자 누군지
 		public List<Schedule> findByUser(Users user);
-	
+		
 		//펫시터 돌봄옵션 필터링
 		public List<Schedule> findByDolbomOptionLike(String dolbomOption);
 		//펫시터 어떤 날
