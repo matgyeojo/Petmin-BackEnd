@@ -26,7 +26,7 @@ public interface PetProfileRepo extends CrudRepository<PetProfile, Integer> {
 	@Query(value = "select u.user_id\r\n" + "from users u join petsitter_profile s on(u.user_id = s.user_id) \r\n"
 			+ "join pet_profile p on (u.user_id=p.user_id)\r\n"
 			+ "where u.user_age >= ?1 and u.user_sex = ?2 and u.user_address like %?3% "
-			+ "and s.sitter_housetype = ?4 and p.pet_sex = ?5 and p.pet_weight <?6 limit 20", nativeQuery = true)
+			+ "and s.sitter_housetype = ?4  limit 20", nativeQuery = true)
 	public List<String> findso(int userAge, String userSex, String userAddress, String sitterHousetype, String petSex,
 			int petWeight);
 
