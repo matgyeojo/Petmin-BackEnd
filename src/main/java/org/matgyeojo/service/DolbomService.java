@@ -113,6 +113,7 @@ public class DolbomService {
 					map.put("sitterMsg", sitter.getSitterMsg());
 					map.put("sitterTem", sitter.getSitterTem());
 					map.put("scheduleDay", schopmap);
+					map.put("userId", user.getUserId());
 					result.add(map);
 				}
 			}
@@ -141,6 +142,7 @@ public class DolbomService {
 					map.put("sitterMsg", sitter.getSitterMsg());
 					map.put("sitterTem", sitter.getSitterTem());
 					map.put("scheduleDay", schopmap);
+					map.put("userId", user.getUserId());
 					result.add(map);
 
 				}
