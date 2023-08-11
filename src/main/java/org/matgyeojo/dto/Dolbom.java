@@ -61,7 +61,7 @@ public class Dolbom {
 	@JoinColumn(name = "pet_no")
 	PetProfile petProfile;
 	
-	@Column(nullable = false)
+	@Column(nullable = false,unique =false )
 	private String START_CARE;// 예약 시작
 	@Column(nullable = false)
 	private String END_CARE;// 예약 끝나는 날짜
