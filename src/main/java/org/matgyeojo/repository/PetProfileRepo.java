@@ -49,5 +49,5 @@ public interface PetProfileRepo extends CrudRepository<PetProfile, Integer> {
 
 	//유저의 펫 한마리
 	public PetProfile findByUserAndPetName(Users user,String petName);
-	
+
 }

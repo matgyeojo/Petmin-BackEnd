@@ -1,5 +1,7 @@
 package org.matgyeojo.controller;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,14 +38,22 @@ public class DolbomController {
 	//돌봄 예약
 	@PostMapping(value = "/reservation")
 	public int dolbomReservation(@RequestParam String userId,@RequestParam String sitterId,
-			@RequestParam String scheduleDay,@RequestParam String[] scheduleHour,@RequestParam String petName) {
+			@RequestParam String[] scheduleDay,@RequestParam String[] scheduleHour,@RequestParam String petName) {
 		return dolbomService.dolbomReservation(userId,sitterId,scheduleDay,scheduleHour,petName);
 	}
 	
 	//돌봄 체크
-	@GetMapping(value = "/checkSitter")
-	public List<Object> dolbomCheckPetsitter(@RequestParam String userId){
-		return dolbomService.dolbomCheckPetsitter(userId);
-	}
+//	@GetMapping(value = "/checkSitter")
+//	public List<Object> dolbomCheckPetsitter(@RequestParam String userId){
+//		try {
+//			return dolbomService.dolbomCheckPetsitter(userId);
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		List<Object> result = new ArrayList<>();
+//		result.add("실패");
+//		return result;
+//	}
 	
 }
