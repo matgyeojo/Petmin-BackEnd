@@ -1,5 +1,7 @@
 package org.matgyeojo.controller;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.matgyeojo.dto.Assurance;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,18 +48,24 @@ public class DolbomController {
 	}
 
 	// 돌봄 체크
-//	@GetMapping(value = "/checkSitter")
-//	public List<Object> dolbomCheckPetsitter(@RequestParam String userId){
-//		try {
-//			return dolbomService.dolbomCheckPetsitter(userId);
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		List<Object> result = new ArrayList<>();
-//		result.add("실패");
-//		return result;
-//	}
+	@GetMapping(value = "/checkSitter")
+	public List<Object> dolbomCheckPetsitter(@RequestParam String userId) {
+		try {
+			return dolbomService.dolbomCheckPetsitter(userId);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		List<Object> result = new ArrayList<>();
+		result.add("실패");
+		return result;
+	}
+
+	// 펫시터가 돌봄을 대기중->수락완료로 수락
+	@PutMapping(value = "/surack")
+	public String dolbomsurack(@RequestParam int dolbomNo) {
+		return dolbomService.dolbomsurack(dolbomNo);
+	}
 
 	// 펫보험 신청 시 값 db에 들어가는거
 	@PostMapping("/assurance")
