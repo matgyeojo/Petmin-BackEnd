@@ -155,7 +155,7 @@ public class PetProfileService {
 
 	// userId로 가장 최근에 등록한 펫정보 찾는거
 	public Integer LatestPetNoByUserId(Users user) {
-		PetProfile petProfile = PetProfileRepo.findFirstByUserIdOrderByPetNoDesc(user);
+		PetProfile petProfile = PetProfileRepo.findFirstByUserOrderByPetNoDesc(user);
 		if (petProfile != null) {
 
 			return petProfile.getPetNo();
