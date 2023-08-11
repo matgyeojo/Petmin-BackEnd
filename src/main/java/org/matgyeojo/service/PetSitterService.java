@@ -7,10 +7,12 @@ import java.util.List;
 
 import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetsitterProfile;
+import org.matgyeojo.dto.Schedule;
 import org.matgyeojo.dto.Users;
 import org.matgyeojo.repository.DolbomRepo;
 import org.matgyeojo.repository.PetProfileRepo;
 import org.matgyeojo.repository.PetsitterProfileRepo;
+import org.matgyeojo.repository.ScheduleRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,9 @@ public class PetSitterService {
 	PetProfileRepo petrepo;
 	@Autowired
 	DolbomRepo dolbomrepo;
-
+	@Autowired
+	ScheduleRepo schrepo;
+	
 	// 펫시터 프로필 생성
 	public String petSitterInsert(String userId, MultipartFile[] sitterHouse, String sitterHousetype, String sitterMsg)
 			throws IOException {
@@ -151,34 +155,34 @@ public class PetSitterService {
 		// 그러면 삭제
 		// 그러면 option값만 변경되며능ㄴ?
 		for (String s : scheduleHour) {
-			List<Dolbom> dols = dolbomrepo.findByUser2AndScheduleDay(sitter, scheduleDay);
+			List<Schedule> sches =schrepo.findByUserAndScheduleDay(sitter, scheduleDay);
 
-			for (Dolbom dolbom : dols) {
+			for (Schedule sc : sches) {
 				// 리스트에서 모든 애들중에 돌봄예약 안된애들은 그냥 삭제
-				if (dolbom.getDolbomStatus()==0) {
-					dolbomrepo.delete(dolbom);
+				if (sc.getDolbomStatus()==0) {
+					schrepo.delete(sc);
 				}
 				// 삭제 안된 애들중에 돌봄 옵션이 일치하지 않으면
-				if (!dolbom.getDolbomOption().equals(dolbomOption) && dolbom.getDolbomStatus()==0) {
-					dolbom.setDolbomOption(dolbomOption);
-					dolbomrepo.save(dolbom);
+				if (!sc.getDolbomOption().equals(dolbomOption) && sc.getDolbomStatus()==0) {
+					sc.setDolbomOption(dolbomOption);
+					schrepo.save(sc);
 				}
 			}
 		}
 
 		// 가능한 시간을 배열로 입력받아 따로따로 저장
 		for (String s : scheduleHour) {
-			if (dolbomrepo.findByUser2AndScheduleDayAndScheduleHour(sitterId, scheduleDay, s) > 0) {
+			if (schrepo.findByUserAndScheduleDayAndScheduleHour(sitterId, scheduleDay, s) > 0) {
 				continue;
 			}
 
-			Dolbom dol = Dolbom.builder().user2(sitter).scheduleDay(scheduleDay).scheduleHour(s).dolbomStatus(0)
+			Schedule sche = Schedule.builder().user(sitter).scheduleDay(scheduleDay).scheduleHour(s).dolbomStatus(0)
 					.dolbomOption(dolbomOption).build();
-			dolbomrepo.save(dol);
+			schrepo.save(sche);
 		}
-		List<Dolbom> dols = dolbomrepo.findByScheduleDay(scheduleDay);
+		List<Schedule> sche = schrepo.findByScheduleDay(scheduleDay);
 		int count = 0;
-		for (Dolbom dol : dols) {
+		for (Schedule sc : sche) {
 			count++;
 		}
 		if (count > 0) {
@@ -197,17 +201,17 @@ public class PetSitterService {
 	// 펫시터 일정 가져오기
 	public List<Object> getSchedure(String sitterId, String scheduleDay) {
 		Users user = userrepo.findById(sitterId).orElse(null);
-		List<Dolbom> dols = dolbomrepo.findByUser2AndScheduleDay(user, scheduleDay);
+		List<Schedule> sches = schrepo.findByUserAndScheduleDay(user, scheduleDay);
 		List<Object> result = new ArrayList<>();
 
-		for (Dolbom dol : dols) {
+		for (Schedule sc : sches) {
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("day", scheduleDay);
-			map.put("dolbomOption", dol.getDolbomOption());
+			map.put("dolbomOption", sc.getDolbomOption());
 
 			HashMap<String, Object> map2 = new HashMap<>();
-			map2.put("Hour2", dol.getScheduleHour());//그시간에 어떤상태인지
-			map2.put("dolbomStatus", dol.getDolbomStatus());
+			map2.put("Hour2", sc.getScheduleHour());//그시간에 어떤상태인지
+			map2.put("dolbomStatus", sc.getDolbomStatus());
 			map.put("Hour", map2);
 			result.add(map);
 		}

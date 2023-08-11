@@ -107,5 +107,9 @@ public class Users {
 	@OneToMany(mappedBy = "user2", fetch = FetchType.LAZY) // 펫시터
 	@JsonIgnore
 	private List<Dolbom> dolbom2;
+	//스케쥴
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY) // 펫시터
+	@JsonIgnore
+	private List<Schedule> schedule;
 
 }
