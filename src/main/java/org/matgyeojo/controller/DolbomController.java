@@ -1,5 +1,7 @@
 package org.matgyeojo.controller;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.matgyeojo.dto.Assurance;
@@ -45,10 +47,9 @@ public class DolbomController {
 		return dolbomService.dolbomReservation(userId, sitterId, scheduleDay, scheduleHour, petName);
 	}
 
-	
-	//돌봄 체크
+	// 돌봄 체크
 	@GetMapping(value = "/checkSitter")
-	public List<Object> dolbomCheckPetsitter(@RequestParam String userId){
+	public List<Object> dolbomCheckPetsitter(@RequestParam String userId) {
 		try {
 			return dolbomService.dolbomCheckPetsitter(userId);
 		} catch (ParseException e) {
@@ -59,15 +60,12 @@ public class DolbomController {
 		result.add("실패");
 		return result;
 	}
-	
-	//펫시터가 돌봄을 대기중->수락완료로 수락
+
+	// 펫시터가 돌봄을 대기중->수락완료로 수락
 	@PutMapping(value = "/surack")
 	public String dolbomsurack(@RequestParam int dolbomNo) {
 		return dolbomService.dolbomsurack(dolbomNo);
 	}
-	
-}
-
 
 	// 펫보험 신청 시 값 db에 들어가는거
 	@PostMapping("/assurance")
