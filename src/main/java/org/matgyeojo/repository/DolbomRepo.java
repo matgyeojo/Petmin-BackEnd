@@ -21,8 +21,10 @@ public interface DolbomRepo extends CrudRepository<Dolbom, Integer>{
 	public List<Dolbom> findByUser2(Users user);
 	//펫시터가 누군지 내림차순 
 	@Query(value = "select * \r\n"
-			+ "from dolbom where petsitter_id = ?1 and dolbom_status in(1,2) order by schedule_day desc , schedule_hour desc", nativeQuery = true)
+			+ "from dolbom where petsitter_id = ?1  order by start_care desc", nativeQuery = true)
 	public List<Dolbom> findByUser2Desc(String userId);
-	
+	//돌봄 등록할 때 중복체크
+	@Query(value = "select count(*) from dolbom where user_id = ?1 and petsitter_id = ?2 and start_care = ?3", nativeQuery = true)
+	public int findByUserSitterStart(String userId,String sitterId,String startCare);
 }
  
