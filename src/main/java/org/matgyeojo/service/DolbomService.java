@@ -171,7 +171,9 @@ public class DolbomService {
 		allReview = (time + kind + delecacy) / 3;
 
 		List<Object> dolList = new ArrayList<>();
-
+		
+		
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("userImg", user.getUserImg());
 		map.put("petsitter", sitter);
@@ -179,9 +181,17 @@ public class DolbomService {
 		map.put("reviewTime", time);
 		map.put("reviewKind", kind);
 		map.put("reviewDelecacy", delecacy);
-		map.put("reviewAll", allReview);
-
+		map.put("reviewScore", allReview);
+		map.put("review", reviews);
+		map.put("sitterSex",user.getUserSex());
+		map.put("sitterAge", user.getUserAge());
+		map.put("sitterHousetype", sitter.getSitterHousetype());
+		
 		dolList.add(map);
+		
+		HashMap<String, Object> map2 = new HashMap<String, Object>();
+	
+		
 
 		return dolList;
 	}
