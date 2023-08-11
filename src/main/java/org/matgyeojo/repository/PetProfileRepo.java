@@ -54,5 +54,4 @@ public interface PetProfileRepo extends CrudRepository<PetProfile, Integer> {
 
 	// 가장 최근에 등록한 펫정보 찾는거
 	public PetProfile findFirstByUserOrderByPetNoDesc(Users user);
-
 }
