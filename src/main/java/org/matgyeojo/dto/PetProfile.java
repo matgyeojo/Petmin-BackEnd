@@ -54,16 +54,22 @@ public class PetProfile {
 	private String petSex; // 반려 성별
 	@Column(nullable = true)
 	private String petImg;// 펫이미지
+	@Column(nullable = true)
+	private String petMsg; // 펫 소개
 
 	// 펫 접종이랑 1대1
+	
 	@OneToOne(mappedBy = "petprofile")
+	//@JsonIgnore
 	private PetVaccine petVaccine;
 
 	// 펫 성향이랑 1대1
 	@OneToOne(mappedBy = "petprofile")
+	//@JsonIgnore
 	private PetTendency petTendency;
 	
 	//돌봄
 	@OneToMany(mappedBy="petProfile")
+	@JsonIgnore
 	private List<Dolbom> dolbom;
 }

@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +39,7 @@ public class Assurance {
 	@Column(nullable =	false)
 	private String assuranceUsertype; //사용자 유형
 	
-	@OneToOne(mappedBy = "assuranceName")
-	private UserAssurance userAssurance;
+	@OneToMany(mappedBy = "assurance", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<UserAssurance> userAssurance;
 }

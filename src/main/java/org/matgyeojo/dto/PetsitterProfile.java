@@ -1,5 +1,6 @@
 package org.matgyeojo.dto;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,7 +39,7 @@ public class PetsitterProfile {
 	
 	@Id
 	@Column(name = "user_id")
-	private String userid;
+	private String userId;
 	
 	@MapsId
 	@OneToOne
@@ -46,16 +48,20 @@ public class PetsitterProfile {
 	@JoinColumn(name = "user_id")
 	Users users;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String sitterHouse;//펫시터 집 이미지
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String sitterHousetype;//펫시티 거주형태
 	@Column(nullable = false)
 	private double sitterTem;//펫시터 온도
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String sitterMsg;//펫시터 자기소개
+	@UpdateTimestamp
+	private Timestamp sitterUpdate;//펫시터 최종수정
 	@OneToMany( mappedBy = "petsitter")
+	@JsonIgnore
 	private List<Review> petsitter;
+	
 
 
 	
