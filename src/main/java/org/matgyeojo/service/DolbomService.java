@@ -241,7 +241,6 @@ public class DolbomService {
 				.build();
 		alrepo.save(al);
 
-		System.out.println(al.getAlarmMsg());
 		return msg;
 	}
 
@@ -256,6 +255,7 @@ public class DolbomService {
 		for(Dolbom dol : dolbomsitter) {
 			HashMap<String, Object> bolmap = new HashMap<String, Object>();//여기에 정보 담아서 result에 add
 			PetProfile pet = petrepo.findById(dol.getPetProfile().getPetNo()).orElse(null);//상대방의 펫
+			Users sangdae= userrepo.findById(dol.getUser1().getUserId()).orElse(null);//상대방 정보
 			
 			String petW = null;
 			if(pet.getPetWeight()<10) {
@@ -277,12 +277,16 @@ public class DolbomService {
 			}else if(dol.getDolbomStatus().equals("수락완료")&&(eDate.getTime() - now.getTime())>0 && (sDate.getTime() - now.getTime())<0) {
 				dol.setDolbomStatus("진행중"); 
 				dolbomrepo.save(dol);
+			}else if(dol.getDolbomStatus().equals("대기중")&&(eDate.getTime() - now.getTime())<0) {
+				dol.setDolbomStatus("기간마감"); 
+				dolbomrepo.save(dol);
 			}
 			
 			bolmap.put("no",dol.getDolbomNo());
 			bolmap.put("startday",dol.getSTART_CARE());
 			bolmap.put("endday",dol.getEND_CARE());
-			bolmap.put("sangdaeName",user.getUserName());
+			bolmap.put("sangdaeName",sangdae.getUserName());
+			bolmap.put("sangdaeId",sangdae.getUserId());
 			bolmap.put("state",dol.getDolbomStatus());
 			bolmap.put("pet",pet);
 			bolmap.put("petW",petW);
@@ -305,8 +309,88 @@ public class DolbomService {
 		}
 		dolbom.setDolbomStatus("수락완료");
 		dolbomrepo.save(dolbom);
+		//사용자를 찾아서 알람전송
+		Users user = userrepo.findById(dolbom.getUser1().getUserId()).orElse(null);
+		Users sitter = userrepo.findById(dolbom.getUser2().getUserId()).orElse(null);
+		Alarm al = Alarm.builder().user(user).alarmMsg(sitter.getUserId() + " 님이 돌봄 요청을 수락하셨습니다:").alarmState(false)
+				.build();
+		alrepo.save(al);
 		
 		return msg;
+	}
+
+	public List<Object> dolbomCheckuser(String userId) throws ParseException {
+		List<Object> result = new ArrayList<>();
+		
+		List<Dolbom> dolbomuser = dolbomrepo.findByUser1Desc(userId);// 내가 유저인것
+	
+		
+		
+		for(Dolbom dol : dolbomuser) {
+			HashMap<String, Object> bolmap = new HashMap<String, Object>();//여기에 정보 담아서 result에 add
+			PetProfile pet = petrepo.findById(dol.getPetProfile().getPetNo()).orElse(null);//내강아지 펫
+			Users sangdae= userrepo.findById(dol.getUser2().getUserId()).orElse(null);//상대방 정보
+			
+			String petW = null;
+			if(pet.getPetWeight()<10) {
+				petW="소형견";
+			}else if(pet.getPetWeight()>25) {
+				petW="대형견";
+			}else {
+				petW="중형견";
+			}
+			
+			//현재 시간이랑 비교해 돌봄 상태 변경
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Date sDate = sdf.parse(dol.getSTART_CARE());
+			Date eDate = sdf.parse(dol.getEND_CARE());
+			if((eDate.getTime() - now.getTime())<0&&dol.getDolbomStatus().equals("진행중")) {
+				dol.setDolbomStatus("종료"); 
+				dolbomrepo.save(dol);
+			}else if(dol.getDolbomStatus().equals("수락완료")&&(eDate.getTime() - now.getTime())>0 && (sDate.getTime() - now.getTime())<0) {
+				dol.setDolbomStatus("진행중"); 
+				dolbomrepo.save(dol);
+			}else if(dol.getDolbomStatus().equals("대기중")&&(eDate.getTime() - now.getTime())<0) {
+				dol.setDolbomStatus("기간마감"); 
+				dolbomrepo.save(dol);
+			}
+			
+			bolmap.put("no",dol.getDolbomNo());
+			bolmap.put("startday",dol.getSTART_CARE());
+			bolmap.put("endday",dol.getEND_CARE());
+			bolmap.put("sangdaeName",sangdae.getUserName());
+			bolmap.put("sangdaeId",sangdae.getUserId());
+			bolmap.put("state",dol.getDolbomStatus());
+			bolmap.put("pet",pet);
+			bolmap.put("petW",petW);
+			bolmap.put("option",dol.getDolbomOption());
+			
+			
+			result.add(bolmap);
+			}
+		
+		return result;
+	}
+
+	//돌봄삭제
+	public String dolbomDelete(int dolbomNo) {
+		String msg = "실패";
+		Dolbom dolbom = dolbomrepo.findById(dolbomNo).orElse(null);
+		dolbomrepo.delete(dolbom);
+		Dolbom dolbom2 = dolbomrepo.findById(dolbomNo).orElse(null);
+		if(dolbom2==null) {
+			msg = "삭제완료";
+		}
+		return msg;
+	}
+
+	//리뷰 리스트 출력
+	public List<Review> reviewList(String sitterId) {
+		Users user = userrepo.findById(sitterId).orElse(null);
+		List<Review> re = reviewrepo.findByPetsitter(user);
+		
+		return re;
 	}
 
 }
