@@ -69,11 +69,11 @@ public class DolbomService {
 			int petweight = 10;
 			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
 		} else if (petWeight.equals("중형견")) {
-			int petweight = 25;
-			filter4 = petrepo.findjoong(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
+			int petweight = 10; //25
+			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
 		} else {
-			int petweight = 25;
-			filter4 = petrepo.findsdae(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
+			int petweight = 10;//25
+			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
 		}
 
 		// 1.users 테이블 = 성별, 나이
