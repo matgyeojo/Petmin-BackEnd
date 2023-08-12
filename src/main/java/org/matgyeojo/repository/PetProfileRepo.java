@@ -45,6 +45,11 @@ public interface PetProfileRepo extends CrudRepository<PetProfile, Integer> {
 			+ "and s.sitter_housetype = ?4 and p.pet_sex = ?5 and p.pet_weight >?6 limit 20", nativeQuery = true)
 	public List<String> findsdae(int userAge, String userSex, String userAddress, String sitterHousetype, String petSex,
 			int petWeight);
+	
+	//간단 주소로만 필터링
+		@Query(value = "select u.user_id\r\n" + "from users u join petsitter_profile s on(u.user_id = s.user_id) \r\n"
+				+ "where u.user_address like %?1% limit 20", nativeQuery = true)
+		public List<String> findaddress(String userAddress);
 
 	// 해당 아이디의 반려견 프로필 정보 불러오기
 	public List<PetProfile> findByUser(Users user);
