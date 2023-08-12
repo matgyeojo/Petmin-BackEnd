@@ -130,7 +130,7 @@ public class DolbomController {
 	}
 	//리뷰 전체목록
 	@GetMapping(value = "/reviewList")
-	public List<Review> reviewList(@RequestParam String sitterId){
+	public List<Object> reviewList(@RequestParam String sitterId){
 		return dolbomService.reviewList(sitterId);
 	}
 	

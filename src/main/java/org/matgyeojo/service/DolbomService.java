@@ -386,12 +386,18 @@ public class DolbomService {
 	}
 
 	//리뷰 리스트 출력
-	public List<Review> reviewList(String sitterId) {
+	public List<Object> reviewList(String sitterId) {
 		Users user = userrepo.findById(sitterId).orElse(null);
+		List<Object> result = new ArrayList<>();
 		List<Review> reviews = reviewrepo.findByPetsitter(user);
+		for(Review re : reviews) {
+			result.add(re);
+			Users reuser = userrepo.findById(re.getUser().getUserId()).orElse(null);
+			String userName = reuser.getUserName();
+			result.add(userName);
+		}
 		
-		
-		return reviews;
+		return result;
 	}
 	
 	//리뷰작성
