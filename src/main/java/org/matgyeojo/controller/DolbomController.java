@@ -133,5 +133,13 @@ public class DolbomController {
 	public List<Review> reviewList(@RequestParam String sitterId){
 		return dolbomService.reviewList(sitterId);
 	}
+	
+	//리뷰등록
+	@PostMapping(value = "/inReview")
+	public String inReview(@RequestParam String userId,@RequestParam String sitterId,@RequestParam int reviewTime,
+			@RequestParam int reviewKind,@RequestParam int reviewDelecacy,@RequestParam String reviewMsg) {
+		return dolbomService.inReview(  userId,  sitterId,  reviewTime,
+				  reviewKind,  reviewDelecacy,  reviewMsg);
+	}
 
 }

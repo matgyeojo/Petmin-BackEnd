@@ -55,7 +55,7 @@ public class DolbomService {
 		// String userSex,int userAge,String sitterHousetype, String petSex,double
 		// petWeight,String userAddress
 		// 선호도 저장
-		String userSex = pre.getPreference1();
+		String userAddresspre = pre.getPreference1();
 		int userAge = pre.getPreference2();
 		String sitterHousetype = pre.getPreference3();
 		String petSex = pre.getPreference4();
@@ -67,13 +67,13 @@ public class DolbomService {
 		List<String> filter4 = new ArrayList<>();
 		if (petWeight.equals("소형견")) {
 			int petweight = 10;
-			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
+			filter4 = petrepo.findaddress(userAddress);
 		} else if (petWeight.equals("중형견")) {
 			int petweight = 10; //25
-			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
+			filter4 = petrepo.findaddress(userAddress);
 		} else {
 			int petweight = 10;//25
-			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype, petSex, petweight);
+			filter4 = petrepo.findaddress(userAddress);
 		}
 
 		// 1.users 테이블 = 성별, 나이
@@ -388,9 +388,29 @@ public class DolbomService {
 	//리뷰 리스트 출력
 	public List<Review> reviewList(String sitterId) {
 		Users user = userrepo.findById(sitterId).orElse(null);
-		List<Review> re = reviewrepo.findByPetsitter(user);
+		List<Review> reviews = reviewrepo.findByPetsitter(user);
 		
-		return re;
+		
+		return reviews;
+	}
+	
+	//리뷰작성
+	public String inReview(String userId, String sitterId, int reviewTime, int reviewKind, int reviewDelecacy,
+			String reviewMsg) {
+		String msg = "실패";
+		Users user = userrepo.findById(userId).orElse(null);//사용자 아이디
+		Users sitter = userrepo.findById(sitterId).orElse(null);//펫시터 아이디		
+		Review review = Review.builder().user(user).petsitter(sitter)
+				.reviewTime(reviewTime).reviewKind(reviewKind).reviewDelecacy(reviewDelecacy)
+				.reviewMsg(reviewMsg)
+				.build();
+		
+		Review re = reviewrepo.save(review);
+		if(re != null) {
+			msg = "리뷰가 작성되었습니다";
+		}
+		
+		return msg;
 	}
 
 }
