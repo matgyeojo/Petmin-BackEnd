@@ -47,7 +47,7 @@ public class PetProfileService {
 			}
 
 			PetProfile pet = PetProfile.builder().petName(petName).petAge(petAge).petSpecies(petSpecies)
-					.petWeight(petWeight).petSex(petSex).user(user).petImg(image_list).build();
+					.petWeight(petWeight).petSex(petSex).user(user).petImg(image_list).petMsg(petMsg).build();
 			PetProfileRepo.save(pet);
 
 			return "펫 프로필 저장 성공";
