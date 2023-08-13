@@ -13,6 +13,7 @@ import org.matgyeojo.repository.ChatRepo;
 import org.matgyeojo.repository.ChatroomRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -112,4 +113,21 @@ public class ChatController {
 //	   }
 //	   return room;
 //   }
+   
+   //채팅방 번호로 채팅방 삭제
+   @DeleteMapping(value = "/roomdel")
+   public String deleteRoom(@RequestParam Long roomId) {
+	  String msg = "삭제실패";
+
+	  Chatroom room = chatroomRepo.findById(roomId).orElse(null);
+	  chatroomRepo.delete(room);
+	  Chatroom room2 = chatroomRepo.findById(roomId).orElse(null);
+	  if(room2 == null) {
+		  msg = "삭제성공";
+	  }
+	   return msg;
+   }
+   
+   
+   
 }

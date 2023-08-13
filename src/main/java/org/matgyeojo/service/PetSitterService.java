@@ -201,12 +201,20 @@ public class PetSitterService {
 	// 펫시터 일정 가져오기
 	public List<Object> getSchedure(String sitterId, String scheduleDay) {
 		Users user = userrepo.findById(sitterId).orElse(null);
-		List<Schedule> sches = schrepo.findByUserAndScheduleDay(user, scheduleDay);
+		List<String> days = schrepo.findnot12(sitterId);
+		String realday=null;
+		for(String day : days) {
+			if(day.equals(scheduleDay)) {
+				realday = day;
+			}
+		}
+		List<Schedule> sches = schrepo.findByUserAndScheduleDay(user, realday);
 		List<Object> result = new ArrayList<>();
 
 		for (Schedule sc : sches) {
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("day", scheduleDay);
+		
+			map.put("day", realday);
 			map.put("dolbomOption", sc.getDolbomOption());
 
 			HashMap<String, Object> map2 = new HashMap<>();
@@ -214,6 +222,7 @@ public class PetSitterService {
 			map2.put("dolbomStatus", sc.getDolbomStatus());
 			map.put("Hour", map2);
 			result.add(map);
+			
 		}
 
 		return result;
