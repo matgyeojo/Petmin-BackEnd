@@ -16,4 +16,6 @@ public interface ChatroomRepo extends CrudRepository<Chatroom, Long> {
    @Query(value = "SELECT * FROM chatroom r WHERE (r.receiver_id = :userId OR r.sender_id = :userId)", nativeQuery = true)
    List<Chatroom> findByUserId(@Param("userId") String userId);
 
+   @Query(value = "select chatroom_id from chatroom where (receiver_id = ?1 and sender_id = ?2) or (receiver_id = ?2 and sender_id = ?1) ", nativeQuery = true)
+   int findRoom(String Id1,String Id2);
 }
