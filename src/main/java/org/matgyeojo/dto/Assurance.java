@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class Assurance {
 	@Column(nullable =	false)
 	private String assuranceUsertype; //사용자 유형
 	
-	@OneToOne(mappedBy = "assuranceName")
+	@OneToMany(mappedBy = "assurance", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private UserAssurance userAssurance;
+	private List<UserAssurance> userAssurance;
 }
