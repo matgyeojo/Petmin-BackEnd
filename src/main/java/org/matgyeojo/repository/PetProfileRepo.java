@@ -23,12 +23,10 @@ public interface PetProfileRepo extends CrudRepository<PetProfile, Integer> {
 //	public List<PetProfile> findByPetSexAndPetWeightGreaterThan(String petSex, double petWeight);
 
 	// 소형견일때 필터링
-	@Query(value = "select u.user_id\r\n" + "from users u join petsitter_profile s on(u.user_id = s.user_id) \r\n"
-			+ "join pet_profile p on (u.user_id=p.user_id)\r\n"
+	@Query(value ="select u.user_id\r\n" + "from users u join petsitter_profile s on(u.user_id = s.user_id) \r\n"
 			+ "where u.user_age >= ?1 and u.user_sex = ?2 and u.user_address like %?3% "
-			+ "and s.sitter_housetype = ?4  limit 20", nativeQuery = true)
-	public List<String> findso(int userAge, String userSex, String userAddress, String sitterHousetype, String petSex,
-			int petWeight);
+			+ "and s.sitter_housetype = ?4 limit 20", nativeQuery = true)
+	public List<String> findso(int userAge, String userSex, String userAddress, String sitterHousetype);
 
 	// 중형견일때 필터링
 	@Query(value = "select u.user_id\r\n" + "from users u join petsitter_profile s on(u.user_id = s.user_id) \r\n"

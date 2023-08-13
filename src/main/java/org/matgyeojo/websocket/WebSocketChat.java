@@ -47,7 +47,7 @@ public class WebSocketChat {
 
    @OnOpen // 클라이언트가 접속할 때 마다 실행
    public void onOpen(Session session, @PathParam("room") String chatroomId) {
-
+	   System.out.println("들어왔다");
       // DB에서 과거 채팅 내역을 client에게 보내준다.
       System.out.println(chatroomId);
       Long room = Long.parseLong(chatroomId);

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.matgyeojo.dto.Alarm;
 import org.matgyeojo.dto.Dolbom;
 import org.matgyeojo.dto.PetProfile;
@@ -24,6 +25,7 @@ import org.matgyeojo.repository.ReviewRepo;
 import org.matgyeojo.repository.ScheduleRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -55,25 +57,48 @@ public class DolbomService {
 		// String userSex,int userAge,String sitterHousetype, String petSex,double
 		// petWeight,String userAddress
 		// 선호도 저장
-		String userAddresspre = pre.getPreference1();
+		String userSex = pre.getPreference1();;
 		int userAge = pre.getPreference2();
 		String sitterHousetype = pre.getPreference3();
 		String petSex = pre.getPreference4();
 		String petWeight = pre.getPreference5();
 		if (userAddress.equals("")) {// 입력값에 아무것도 입력 안하면 기본으로 자신의 주소
 			userAddress = u.getUserAddress();
+		}else {
+			 int openParenthesisIndex = userAddress.lastIndexOf("(");
+			 if (openParenthesisIndex == -1) {
+				 System.out.println(userAddress);
+		       }else {
+		    	   int commaIndex = userAddress.lastIndexOf(",");
+		    	   if(commaIndex == -1) {
+		    		   commaIndex = userAddress.lastIndexOf(")");
+		    		   String extractedDong = userAddress.substring(openParenthesisIndex + 1, commaIndex);
+				       extractedDong = extractedDong.trim();
+				       userAddress = extractedDong;
+				       System.out.println(userAddress);
+		    	   }else {
+		    		   commaIndex = userAddress.lastIndexOf(",");
+						  String extractedDong = userAddress.substring(openParenthesisIndex + 1, commaIndex);
+					       extractedDong = extractedDong.trim();
+					       userAddress = extractedDong;
+					       System.out.println(userAddress);
+		    	   }
+		    	   
+		       }
+			
 		}
-
+		
 		List<String> filter4 = new ArrayList<>();
+		 System.out.println(userAddress);
 		if (petWeight.equals("소형견")) {
 			int petweight = 10;
-			filter4 = petrepo.findaddress(userAddress);
+			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype);
 		} else if (petWeight.equals("중형견")) {
-			int petweight = 10; //25
-			filter4 = petrepo.findaddress(userAddress);
+			int petweight = 10;
+			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype);
 		} else {
-			int petweight = 10;//25
-			filter4 = petrepo.findaddress(userAddress);
+			int petweight = 10;
+			filter4 = petrepo.findso(userAge, userSex, userAddress, sitterHousetype);
 		}
 
 		// 1.users 테이블 = 성별, 나이
@@ -85,7 +110,7 @@ public class DolbomService {
 		List<Object> result = new ArrayList<>();
 
 		HashMap<String, String> success = new HashMap<String, String>();
-
+		 System.out.println(filter4);
 		// 만약 필터에 걸리는게 하나도 없으면
 		if (filter4.isEmpty()) {
 			// 유저 20개
@@ -394,7 +419,9 @@ public class DolbomService {
 			result.add(re);
 			Users reuser = userrepo.findById(re.getUser().getUserId()).orElse(null);
 			String userName = reuser.getUserName();
-			result.add(userName);
+			HashMap<String, String> name = new HashMap<String, String>();
+			name.put("userName", userName);
+			result.add(name);
 		}
 		
 		return result;
