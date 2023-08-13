@@ -416,10 +416,17 @@ public class DolbomService {
 		List<Object> result = new ArrayList<>();
 		List<Review> reviews = reviewrepo.findByPetsitter(user);
 		for(Review re : reviews) {
-			result.add(re);
 			Users reuser = userrepo.findById(re.getUser().getUserId()).orElse(null);
 			String userName = reuser.getUserName();
-			HashMap<String, String> name = new HashMap<String, String>();
+			HashMap<String, Object> name = new HashMap<String, Object>();
+			
+			name.put("reviewNo", re.getReviewNo());
+			name.put("reviewKind", re.getReviewKind());
+			name.put("reviewDelecacy", re.getReviewDelecacy());
+			name.put("reviewTime", re.getReviewTime());
+			name.put("reviewMsg", re.getReviewMsg());
+			name.put("userId", re.getUser().getUserId());
+			name.put("petsitterId", re.getPetsitter().getUserId());
 			name.put("userName", userName);
 			result.add(name);
 		}
