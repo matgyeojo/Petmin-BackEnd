@@ -55,6 +55,7 @@ public class DolbomService {
 	   ChatroomRepo chatroomRepo;
 	// 돌봄 선호필터
 	public List<Object> dolbomFilter(String userId, String userAddress) {
+		System.out.println(userAddress);
 		Users u = userrepo.findById(userId).orElse(null);// 유저 가져오기
 		Preference pre = prerepo.findByUser(u);// 유저의 선호필터 가져오기
 		// String userSex,int userAge,String sitterHousetype, String petSex,double
@@ -403,7 +404,7 @@ public class DolbomService {
 			Date sDate = sdf.parse(dol.getSTART_CARE());
 			Date eDate = sdf.parse(dol.getEND_CARE());
 			if ((eDate.getTime() - now.getTime()) < 0 && dol.getDolbomStatus().equals("진행중")) {
-				dol.setDolbomStatus("종료");
+				dol.setDolbomStatus("종료:리뷰 작성 전");
 				dolbomrepo.save(dol);
 			} else if (dol.getDolbomStatus().equals("수락완료") && (eDate.getTime() - now.getTime()) > 0
 					&& (sDate.getTime() - now.getTime()) < 0) {
@@ -473,25 +474,27 @@ public class DolbomService {
 	}
 
 	// 리뷰작성
-	public String inReview(String userId, String sitterId, int reviewTime, int reviewKind, int reviewDelecacy,
+	public String inReview(int dolbomNo, int reviewTime, int reviewKind, int reviewDelecacy,
 			String reviewMsg) {
 		String msg = "실패";
-		Users user = userrepo.findById(userId).orElse(null);// 사용자 아이디
-		Users sitter = userrepo.findById(sitterId).orElse(null);// 펫시터 아이디
+		Dolbom dolbom = dolbomrepo.findById(dolbomNo).orElse(null);
+		Users user = userrepo.findById(dolbom.getUser1().getUserId()).orElse(null);// 사용자 아이디
+		Users sitter = userrepo.findById(dolbom.getUser2().getUserId()).orElse(null);// 펫시터 아이디
 		Review review = Review.builder().user(user).petsitter(sitter).reviewTime(reviewTime).reviewKind(reviewKind)
 				.reviewDelecacy(reviewDelecacy).reviewMsg(reviewMsg).build();
 
 		Review re = reviewrepo.save(review);
 		if (re != null) {
 			msg = "리뷰가 작성되었습니다";
-			PetsitterProfile si = petsitterrepo.findById(sitterId).get();
+			PetsitterProfile si = petsitterrepo.findById(sitter.getUserId()).get();
 			double tem = si.getSitterTem();
 			int sum = reviewTime + reviewKind + reviewDelecacy;
 			double temp = (sum - 9) * 0.2;
 			tem += temp;
 			si.setSitterTem(tem);
 			petsitterrepo.save(si);
-
+			dolbom.setDolbomStatus("종료");
+			dolbomrepo.save(dolbom);
 		}
 
 		return msg;

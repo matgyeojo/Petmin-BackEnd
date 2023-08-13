@@ -137,9 +137,9 @@ public class DolbomController {
 	
 	//리뷰등록
 	@PostMapping(value = "/inReview")
-	public String inReview(@RequestParam String userId,@RequestParam String sitterId,@RequestParam int reviewTime,
+	public String inReview(@RequestParam int dolbomNo,@RequestParam int reviewTime,
 			@RequestParam int reviewKind,@RequestParam int reviewDelecacy,@RequestParam String reviewMsg) {
-		return dolbomService.inReview(  userId,  sitterId,  reviewTime,
+		return dolbomService.inReview(  dolbomNo,  reviewTime,
 				  reviewKind,  reviewDelecacy,  reviewMsg);
 	}
 
