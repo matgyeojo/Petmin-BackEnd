@@ -46,6 +46,12 @@ public class UserController {
 	public Users registerCard(@RequestBody Users user) {
 		return userService.registerCard(user);
 	}
+	
+	//카드 비밀번호 확인
+	@GetMapping(value = "/checkCard")
+	public Boolean checkCard(@RequestParam String userId, String userCardPass) {
+		return userService.checkCard(userId, Integer.parseInt(userCardPass));
+	}
 
 	// 개인정보 수정 - 주소, 사진
 	@PutMapping(value = "/updateInfoAll")
