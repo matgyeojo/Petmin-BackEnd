@@ -31,7 +31,7 @@ import lombok.ToString;
 public class Chatroom {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
-   private int chatroomId; // 채팅방 번호
+   private Long chatroomId; // 채팅방 번호
 
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "sender_id")
