@@ -17,6 +17,10 @@ public interface ScheduleRepo extends CrudRepository<Schedule, Integer>{
 		//사용자 누군지
 		public List<Schedule> findByUser(Users user);
 		
+		//펫시터 상태 1,2 포함한 날은 출력 x
+		@Query(value = "select schedule_day from schedule where schedule_day not in (select schedule_day from schedule where dolbom_status = 1 OR dolbom_status = 2 ) and petsitter_id= ?1 group by schedule_day;", nativeQuery = true)
+		public List<String> findnot12(String SitterId);
+		
 		//펫시터 돌봄옵션 필터링
 		public List<Schedule> findByDolbomOptionLike(String dolbomOption);
 		//펫시터 어떤 날
