@@ -12,7 +12,7 @@ public interface DolbomRepo extends CrudRepository<Dolbom, Integer>{
 	public List<Dolbom> findByUser1(Users user);
 	//사용자 누군지 내림차순
 	@Query(value = "select * \r\n"
-			+ "from dolbom where petsitter_id = ?1  order by start_care desc", nativeQuery = true)
+			+ "from dolbom where user_id = ?1  order by start_care desc", nativeQuery = true)
 	public List<Dolbom> findByUser1Desc(String userId);
 	//펫시터가 누군지
 	public List<Dolbom> findByUser2(Users user);

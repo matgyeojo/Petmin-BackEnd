@@ -34,9 +34,11 @@ public class PetProfileController {
 			@RequestParam int petAge, @RequestParam String petSpecies, @RequestParam double petWeight,
 			@RequestParam String petSex, @RequestParam MultipartFile petImg, @RequestParam String petMsg) {
 		String message = null;
+		System.out.println("petMsg:" + petMsg);
 		try {
 			message = PetProfileService.petprofileSave(userId, petName, petAge, petSpecies, petWeight, petSex, petImg,
 					petMsg);
+			System.out.println("petImg" + petImg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

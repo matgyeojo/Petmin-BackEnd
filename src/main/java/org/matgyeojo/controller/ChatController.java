@@ -64,7 +64,7 @@ public class ChatController {
             map.put("sender", senderUser);
             map.put("receiver", receiverUser);
          } else {
-            Long chatId = existingRoom.getChatroomId();
+        	 Long chatId = existingRoom.getChatroomId();
             map.put("message", "상담 신청 내역이 있습니다. 이전 채팅방에 입장합니다.");
             map.put("chatroomId", existingRoom.getChatroomId());
             List<Chat> chatHistory = chatRepo.findByChatroomOrderByChatDate(existingRoom);
@@ -93,4 +93,23 @@ public class ChatController {
 
       return chatroom;
    }
+   
+//   //채팅방 찾기 유저정보랑 펫시터 정보가 주어짐
+//   @GetMapping(value = "/findroom")
+//   public int findRoom(@RequestParam String Id1,@RequestParam String Id2) {
+//	   int room = chatroomRepo.findRoom(Id1, Id2);
+//	   if(room>0) {
+//		   
+//	   }else {
+//		     Users senderUser = usersRepo.findById(Id1).orElse(null);
+//		      Users receiverUser = usersRepo.findById(Id2).orElse(null);
+//		// 채팅방이 없으면 새로 생성
+//           Chatroom newRoom = new Chatroom();
+//           newRoom.setSender(senderUser);
+//           newRoom.setReceiver(receiverUser);
+//           newRoom = chatroomRepo.save(newRoom);
+//           room = newRoom.getChatroomId();
+//	   }
+//	   return room;
+//   }
 }
