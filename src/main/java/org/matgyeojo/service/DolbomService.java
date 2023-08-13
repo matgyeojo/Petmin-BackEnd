@@ -448,6 +448,14 @@ public class DolbomService {
 		Review re = reviewrepo.save(review);
 		if(re != null) {
 			msg = "리뷰가 작성되었습니다";
+			PetsitterProfile si = petsitterrepo.findById(sitterId).get();
+			double tem = si.getSitterTem();
+			int sum = reviewTime+reviewKind+reviewDelecacy;
+			double temp = (sum-9)*0.2;
+			tem+=temp;
+			si.setSitterTem(tem);
+			petsitterrepo.save(si);
+		
 		}
 		
 		return msg;
