@@ -38,6 +38,12 @@ public class UserService {
 			return "회원가입 실패";
 		}
 	}
+	
+	//카드 비밀번호 확인
+	public Boolean checkCard(String userId, Integer userCardPass) {
+		Users user = UsersRepo.findById(userId).orElse(null); 
+		return user.getUserCardpass() - userCardPass == 0;
+	}
 
 	// 카드 등록
 	public Users registerCard(Users users) {

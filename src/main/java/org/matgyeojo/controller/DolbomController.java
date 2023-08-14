@@ -50,12 +50,19 @@ public class DolbomController {
 		return dolbomService.dolbomDetail(sitterId);
 	}
 
+//	// 돌봄 예약
+//	@PostMapping(value = "/reservation")
+//	public int dolbomReservation(@RequestParam String userId, @RequestParam String sitterId,
+//			@RequestParam String[] scheduleDay, @RequestParam String[] scheduleHour, @RequestParam String petName) {
+//		return dolbomService.dolbomReservation(userId, sitterId, scheduleDay, scheduleHour, petName);
+//	}
 	// 돌봄 예약
-	@PostMapping(value = "/reservation")
-	public int dolbomReservation(@RequestParam String userId, @RequestParam String sitterId,
-			@RequestParam String[] scheduleDay, @RequestParam String[] scheduleHour, @RequestParam String petName) {
-		return dolbomService.dolbomReservation(userId, sitterId, scheduleDay, scheduleHour, petName);
-	}
+		@PostMapping(value = "/reservation")
+		public int dolbomReservation(@RequestParam String userId, @RequestParam String sitterId,
+				@RequestParam String[] scheduleDay, @RequestParam String petName) {
+			return dolbomService.dolbomReservation(userId, sitterId, scheduleDay, petName);
+		}
+
 
 	// 돌봄 펫시터입장에서 체크
 	@GetMapping(value = "/checkSitter")
@@ -136,9 +143,9 @@ public class DolbomController {
 	
 	//리뷰등록
 	@PostMapping(value = "/inReview")
-	public String inReview(@RequestParam String userId,@RequestParam String sitterId,@RequestParam int reviewTime,
+	public String inReview(@RequestParam int dolbomNo,@RequestParam int reviewTime,
 			@RequestParam int reviewKind,@RequestParam int reviewDelecacy,@RequestParam String reviewMsg) {
-		return dolbomService.inReview(  userId,  sitterId,  reviewTime,
+		return dolbomService.inReview(  dolbomNo,  reviewTime,
 				  reviewKind,  reviewDelecacy,  reviewMsg);
 	}
 

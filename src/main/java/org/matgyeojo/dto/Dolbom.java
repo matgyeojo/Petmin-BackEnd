@@ -70,6 +70,8 @@ public class Dolbom {
 	private String dolbomStatus;// 대기중~
 	@Column(nullable = true)
 	private String dolbomOption;// 돌봄 종류
+	@Column(nullable = true)
+	private String scheduleNo;//스케줄번호들
 	
 	
 	@OneToMany(mappedBy = "dolbom", fetch = FetchType.LAZY)
