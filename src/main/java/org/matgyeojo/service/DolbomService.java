@@ -51,8 +51,9 @@ public class DolbomService {
 	AlarmRepo alrepo;
 	@Autowired
 	ScheduleRepo schrepo;
-	   @Autowired
-	   ChatroomRepo chatroomRepo;
+	@Autowired
+	ChatroomRepo chatroomRepo;
+
 	// 돌봄 선호필터
 	public List<Object> dolbomFilter(String userId, String userAddress) {
 		System.out.println(userAddress);
@@ -232,32 +233,76 @@ public class DolbomService {
 		return dolList;
 	}
 
+//	// 돌봄예약
+//	public int dolbomReservation(String userId, String sitterId, String[] scheduleDay, String[] scheduleHour,
+//			String petName) {
+//		int msg = 0;
+//		Users user = userrepo.findById(userId).orElse(null);
+//		Users sitter = userrepo.findById(sitterId).orElse(null);// 펫시터 가져오기
+//		PetProfile pet = petrepo.findByUserAndPetName(user, petName);
+//		String startDay = scheduleDay[0] + " " + scheduleHour[0];
+//		String h[] = scheduleHour[scheduleHour.length - 1].split(":");
+//		String endDay = scheduleDay[scheduleDay.length - 1] + " " + (Integer.parseInt(h[0]) + 1) + ":00";
+//		String option = null;
+//		String scheNo = "";
+//		int check = dolbomrepo.findByUserSitterStart(userId, sitterId, startDay);
+//		if (check > 0) {
+//			return msg;
+//		}
+//		for (String s : scheduleHour) {// 스케쥴 시간 포문
+//			for (String ss : scheduleDay) {
+//				// 돌봄테이블에서 펫시터의 날짜 시간 일치하는거 가져와서 예약되었다고 표시.
+//				Schedule sche = schrepo.findByUserAndScheduleDayAndScheduleHour(sitter, ss, s);
+//				sche.setDolbomStatus(2); // 0->안된거 1-> 된거 2->대기
+//				schrepo.save(sche);
+//				msg = 1;
+//				option = sche.getDolbomOption();
+//				scheNo += (sche.getScheduleNo() + ",");
+//			}
+//		}
+//
+//		scheNo = scheNo.substring(0, scheNo.length() - 1);
+//		Dolbom dol = Dolbom.builder().user1(user).user2(sitter).START_CARE(startDay).END_CARE(endDay)
+//				.dolbomStatus("대기중").dolbomOption(option).petProfile(pet).scheduleNo(scheNo).build();
+//		dolbomrepo.save(dol);
+//
+//		Alarm al = Alarm.builder().user(sitter).alarmMsg(user.getUserId() + " 님이 돌봄 요청서를 보내셨습니다:").alarmState(false)
+//				.build();
+//		alrepo.save(al);
+//
+//		return msg;
+//	}
+
 	// 돌봄예약
-	public int dolbomReservation(String userId, String sitterId, String[] scheduleDay, String[] scheduleHour,
-			String petName) {
+	public int dolbomReservation(String userId, String sitterId, String[] scheduleDay, String petName) {
 		int msg = 0;
 		Users user = userrepo.findById(userId).orElse(null);
 		Users sitter = userrepo.findById(sitterId).orElse(null);// 펫시터 가져오기
 		PetProfile pet = petrepo.findByUserAndPetName(user, petName);
-		String startDay = scheduleDay[0] + " " + scheduleHour[0];
-		String h[] = scheduleHour[scheduleHour.length - 1].split(":");
-		String endDay = scheduleDay[scheduleDay.length - 1] + " " + (Integer.parseInt(h[0]) + 1) + ":00";
+		
+		String[] startsche = scheduleDay[0].split(" ");// 2023-04-04 14:00 형태 쪼개기
+		String[] endsche = scheduleDay[scheduleDay.length-1].split(" ");// 2023-04-04 14:00 형태 쪼개기
+		String startDay = startsche[0] + " " + startsche[1];
+		String h[] = endsche[1].split(":");
+		String endDay = endsche[0] + " " + (Integer.parseInt(h[0]) + 1) + ":00";
+		
 		String option = null;
-		String scheNo = "";
-		int check = dolbomrepo.findByUserSitterStart(userId, sitterId, startDay);
-		if (check > 0) {
-			return msg;
-		}
-		for (String s : scheduleHour) {// 스케쥴 시간 포문
-			for (String ss : scheduleDay) {
-				// 돌봄테이블에서 펫시터의 날짜 시간 일치하는거 가져와서 예약되었다고 표시.
-				Schedule sche = schrepo.findByUserAndScheduleDayAndScheduleHour(sitter, ss, s);
-				sche.setDolbomStatus(2); // 0->안된거 1-> 된거 2->대기
-				schrepo.save(sche);
-				msg = 1;
-				option = sche.getDolbomOption();
-				scheNo += (sche.getScheduleNo() + ",");
+		String scheNo = "";//스케쥴 넘버 저장할거
+		for (String scheday : scheduleDay) {
+		
+			int check = dolbomrepo.findByUserSitterStart(userId, sitterId, startDay);
+			if (check > 0) {
+				return msg;
 			}
+			
+			String[] day = scheday.split(" ");
+			// 돌봄테이블에서 펫시터의 날짜 시간 일치하는거 가져와서 예약되었다고 표시.
+			Schedule sche = schrepo.findByUserAndScheduleDayAndScheduleHour(sitter, day[0], day[1]);
+			sche.setDolbomStatus(2); // 0->안된거 1-> 된거 2->대기
+			schrepo.save(sche);
+			msg = 1;
+			option = sche.getDolbomOption();
+			scheNo += (sche.getScheduleNo() + ",");
 		}
 
 		scheNo = scheNo.substring(0, scheNo.length() - 1);
@@ -271,17 +316,6 @@ public class DolbomService {
 
 		return msg;
 	}
-
-//		
-//		Dolbom dol = Dolbom.builder().user1(user).user2(sitter).START_CARE(startDay).END_CARE(endDay).dolbomStatus("대기중").dolbomOption(option).petProfile(pet).build();
-//		dolbomrepo.save(dol);
-//		
-//		Alarm al = Alarm.builder().user(sitter).alarmMsg(user.getUserId() + " 님이 돌봄 요청서를 보내셨습니다:").alarmState(false)
-//				.build();
-//		alrepo.save(al);
-//
-//		return msg;
-//	}
 
 	// 돌봄 확인 체크
 	public List<Object> dolbomCheckPetsitter(String userId) throws ParseException {
@@ -344,27 +378,25 @@ public class DolbomService {
 		if (dolbom != null) {
 			msg = "성공";
 		}
-		String ds =  dolbom.getScheduleNo();
+		String ds = dolbom.getScheduleNo();
 		System.out.println(ds.indexOf(","));
-		if(ds.indexOf(",")>0) {
+		if (ds.indexOf(",") > 0) {
 			String[] scheNos = dolbom.getScheduleNo().split(",");
-		
+
 			for (String sc : scheNos) {
 				int scheNo = Integer.parseInt(sc);
 				Schedule schedule = schrepo.findById(scheNo).orElse(null);
 				schedule.setDolbomStatus(1);
 				schrepo.save(schedule);
 
-			
 			}
-		}else {
+		} else {
 			int scheNo = Integer.parseInt(ds);
 			Schedule schedule = schrepo.findById(scheNo).orElse(null);
 			schedule.setDolbomStatus(1);
 			schrepo.save(schedule);
 
 		}
-		
 
 		dolbom.setDolbomStatus("수락완료");
 		dolbomrepo.save(dolbom);
@@ -436,12 +468,12 @@ public class DolbomService {
 		String msg = "실패";
 		Dolbom dolbom = dolbomrepo.findById(dolbomNo).orElse(null);
 		dolbomrepo.delete(dolbom);
-		
+
 		Users id1 = dolbom.getUser1();
 		Users id2 = dolbom.getUser2();
 		Chatroom room = chatroomRepo.findBySenderAndReceiver(id1, id2);
 		chatroomRepo.delete(room);
-		
+
 		Dolbom dolbom2 = dolbomrepo.findById(dolbomNo).orElse(null);
 		if (dolbom2 == null) {
 			msg = "삭제완료";
@@ -474,8 +506,7 @@ public class DolbomService {
 	}
 
 	// 리뷰작성
-	public String inReview(int dolbomNo, int reviewTime, int reviewKind, int reviewDelecacy,
-			String reviewMsg) {
+	public String inReview(int dolbomNo, int reviewTime, int reviewKind, int reviewDelecacy, String reviewMsg) {
 		String msg = "실패";
 		Dolbom dolbom = dolbomrepo.findById(dolbomNo).orElse(null);
 		Users user = userrepo.findById(dolbom.getUser1().getUserId()).orElse(null);// 사용자 아이디

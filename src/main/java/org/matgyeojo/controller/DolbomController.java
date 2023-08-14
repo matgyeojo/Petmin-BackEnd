@@ -50,12 +50,18 @@ public class DolbomController {
 		return dolbomService.dolbomDetail(sitterId);
 	}
 
+//	// 돌봄 예약
+//	@PostMapping(value = "/reservation")
+//	public int dolbomReservation(@RequestParam String userId, @RequestParam String sitterId,
+//			@RequestParam String[] scheduleDay, @RequestParam String[] scheduleHour, @RequestParam String petName) {
+//		return dolbomService.dolbomReservation(userId, sitterId, scheduleDay, scheduleHour, petName);
+//	}
 	// 돌봄 예약
-	@PostMapping(value = "/reservation")
-	public int dolbomReservation(@RequestParam String userId, @RequestParam String sitterId,
-			@RequestParam String[] scheduleDay, @RequestParam String[] scheduleHour, @RequestParam String petName) {
-		return dolbomService.dolbomReservation(userId, sitterId, scheduleDay, scheduleHour, petName);
-	}
+		@PostMapping(value = "/reservation")
+		public int dolbomReservation(@RequestParam String userId, @RequestParam String sitterId,
+				@RequestParam String[] scheduleDay, @RequestParam String petName) {
+			return dolbomService.dolbomReservation(userId, sitterId, scheduleDay, petName);
+		}
 
 
 	// 돌봄 펫시터입장에서 체크
