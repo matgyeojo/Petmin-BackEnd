@@ -339,7 +339,7 @@ public class DolbomService {
 			Date sDate = sdf.parse(dol.getSTART_CARE());
 			Date eDate = sdf.parse(dol.getEND_CARE());
 			if ((eDate.getTime() - now.getTime()) < 0 && dol.getDolbomStatus().equals("진행중")) {
-				dol.setDolbomStatus("종료");
+				dol.setDolbomStatus("종료: 리뷰 작성 전");
 				dolbomrepo.save(dol);
 			} else if (dol.getDolbomStatus().equals("수락완료") && (eDate.getTime() - now.getTime()) > 0
 					&& (sDate.getTime() - now.getTime()) < 0) {
