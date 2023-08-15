@@ -119,6 +119,7 @@ public class DolbomService {
 			success.put("추천", "실패");
 			result.add(success);
 			for (String use : userss) {
+				if (!use.equals(userId)) { // 자신의 userId 데이터는 안가져오게 하는거
 				HashMap<String, Object> map = new HashMap<>();
 				Users user = userrepo.findById(use).orElse(null);
 				PetsitterProfile sitter = petsitterrepo.findById(use).orElse(null);
@@ -141,6 +142,7 @@ public class DolbomService {
 					map.put("scheduleDay", schopmap);
 					map.put("userId", user.getUserId());
 					result.add(map);
+				}
 				}
 			}
 			return result;
