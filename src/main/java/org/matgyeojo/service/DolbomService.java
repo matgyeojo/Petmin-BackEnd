@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.HttpStatus;
 import org.matgyeojo.dto.Alarm;
 import org.matgyeojo.dto.Chatroom;
 import org.matgyeojo.dto.Dolbom;
@@ -27,11 +26,7 @@ import org.matgyeojo.repository.ReviewRepo;
 import org.matgyeojo.repository.ScheduleRepo;
 import org.matgyeojo.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import lombok.extern.java.Log;
 
 @Service
 public class DolbomService {
@@ -124,6 +119,7 @@ public class DolbomService {
 			success.put("추천", "실패");
 			result.add(success);
 			for (String use : userss) {
+				if (!use.equals(userId)) { // 자신의 userId 데이터는 안가져오게 하는거
 				HashMap<String, Object> map = new HashMap<>();
 				Users user = userrepo.findById(use).orElse(null);
 				PetsitterProfile sitter = petsitterrepo.findById(use).orElse(null);
@@ -148,35 +144,37 @@ public class DolbomService {
 
 					result.add(map);
 				}
+				}
 			}
 			return result;
 		} else {
 			success.put("추천", "성공");
 			result.add(success);
 			for (String fil : filter4) {
-				// 필요한 정보들만 추출
-				HashMap<String, Object> map = new HashMap<>();
-				Users user = userrepo.findById(fil).orElse(null);
-				PetsitterProfile sitter = petsitterrepo.findById(fil).orElse(null);
-				HashMap<String, Object> schopmap = new HashMap<String, Object>();
+				if (!fil.equals(userId)) { // 자신의 userId 데이터는 안가져오게 하는거
+					// 필요한 정보들만 추출
+					HashMap<String, Object> map = new HashMap<>();
+					Users user = userrepo.findById(fil).orElse(null);
+					PetsitterProfile sitter = petsitterrepo.findById(fil).orElse(null);
+					HashMap<String, Object> schopmap = new HashMap<String, Object>();
 
-				if (sitter != null) {
+					if (sitter != null) {
 
-					// 프론트에서 필터링하는데 필요한 부분
-					List<Schedule> sche = schrepo.findByUser(user);
+						// 프론트에서 필터링하는데 필요한 부분
+						List<Schedule> sche = schrepo.findByUser(user);
 
-					for (Schedule sc : sche) {
-						schopmap.put(sc.getScheduleDay(), sc.getDolbomOption());
+						for (Schedule sc : sche) {
+							schopmap.put(sc.getScheduleDay(), sc.getDolbomOption());
+						}
+						map.put("userName", user.getUserName());
+						map.put("userAddress", user.getUserAddress());
+						map.put("sitterHouse", sitter.getSitterHouse());
+						map.put("sitterMsg", sitter.getSitterMsg());
+						map.put("sitterTem", sitter.getSitterTem());
+						map.put("scheduleDay", schopmap);
+						map.put("userId", user.getUserId());
+						result.add(map);
 					}
-					map.put("userName", user.getUserName());
-					map.put("userAddress", user.getUserAddress());
-					map.put("sitterHouse", sitter.getSitterHouse());
-					map.put("sitterMsg", sitter.getSitterMsg());
-					map.put("sitterTem", sitter.getSitterTem());
-					map.put("scheduleDay", schopmap);
-					map.put("userId",user.getUserId());
-					result.add(map);
-
 				}
 			}
 			return result;
@@ -283,22 +281,22 @@ public class DolbomService {
 		Users user = userrepo.findById(userId).orElse(null);
 		Users sitter = userrepo.findById(sitterId).orElse(null);// 펫시터 가져오기
 		PetProfile pet = petrepo.findByUserAndPetName(user, petName);
-		
+
 		String[] startsche = scheduleDay[0].split(" ");// 2023-04-04 14:00 형태 쪼개기
-		String[] endsche = scheduleDay[scheduleDay.length-1].split(" ");// 2023-04-04 14:00 형태 쪼개기
+		String[] endsche = scheduleDay[scheduleDay.length - 1].split(" ");// 2023-04-04 14:00 형태 쪼개기
 		String startDay = startsche[0] + " " + startsche[1];
 		String h[] = endsche[1].split(":");
 		String endDay = endsche[0] + " " + (Integer.parseInt(h[0]) + 1) + ":00";
-		
+
 		String option = null;
-		String scheNo = "";//스케쥴 넘버 저장할거
+		String scheNo = "";// 스케쥴 넘버 저장할거
 		for (String scheday : scheduleDay) {
-		
+
 			int check = dolbomrepo.findByUserSitterStart(userId, sitterId, startDay);
 			if (check > 0) {
 				return msg;
 			}
-			
+
 			String[] day = scheday.split(" ");
 			// 돌봄테이블에서 펫시터의 날짜 시간 일치하는거 가져와서 예약되었다고 표시.
 			Schedule sche = schrepo.findByUserAndScheduleDayAndScheduleHour(sitter, day[0], day[1]);
@@ -347,7 +345,7 @@ public class DolbomService {
 			Date sDate = sdf.parse(dol.getSTART_CARE());
 			Date eDate = sdf.parse(dol.getEND_CARE());
 			if ((eDate.getTime() - now.getTime()) < 0 && dol.getDolbomStatus().equals("진행중")) {
-				dol.setDolbomStatus("종료");
+				dol.setDolbomStatus("종료: 리뷰 작성 전");
 				dolbomrepo.save(dol);
 			} else if (dol.getDolbomStatus().equals("수락완료") && (eDate.getTime() - now.getTime()) > 0
 					&& (sDate.getTime() - now.getTime()) < 0) {
