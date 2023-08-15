@@ -201,11 +201,12 @@ public class PetSitterService {
 	// 펫시터 일정 가져오기
 	public List<Object> getSchedure(String sitterId, String scheduleDay) {
 		Users user = userrepo.findById(sitterId).orElse(null);
-		List<String> days = schrepo.findnot12(sitterId);
+		List<Schedule> days = schrepo.findByUser(user);
+		System.out.println(scheduleDay);
 		String realday=null;
-		for(String day : days) {
-			if(day.equals(scheduleDay)) {
-				realday = day;
+		for(Schedule day : days) {
+			if(day.getScheduleDay().equals(scheduleDay)) {
+				realday = day.getScheduleDay();
 			}
 		}
 		List<Schedule> sches = schrepo.findByUserAndScheduleDay(user, realday);
