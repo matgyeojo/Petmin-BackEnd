@@ -31,6 +31,7 @@ public class HospitalController {
     public HospitalController(HospitalService hospitalService) {
         this.hospitalService = hospitalService;
     }
+
     //서울 동뭉병원
 //    @GetMapping("/seoul")
 //    public void saveDataFromApi() {

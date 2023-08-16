@@ -140,7 +140,8 @@ public class DolbomService {
 					map.put("sitterMsg", sitter.getSitterMsg());
 					map.put("sitterTem", sitter.getSitterTem());
 					map.put("scheduleDay", schopmap);
-					map.put("userId", user.getUserId());
+					map.put("userId",user.getUserId());
+
 					result.add(map);
 				}
 				}
@@ -213,6 +214,9 @@ public class DolbomService {
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("userImg", user.getUserImg());
+		map.put("userName", user.getUserName());
+		map.put("userAddress", user.getUserAddress());
+		map.put("userTemp", sitter.getSitterTem());
 		map.put("petsitter", sitter);
 		map.put("pet", pets);
 		map.put("reviewTime", time);
