@@ -354,6 +354,9 @@ public class DolbomService {
 			} else if (dol.getDolbomStatus().equals("대기중") && (eDate.getTime() - now.getTime()) < 0) {
 				dol.setDolbomStatus("기간마감");
 				dolbomrepo.save(dol);
+			}else if(dol.getDolbomStatus().equals("수락완료") && (eDate.getTime() - now.getTime()) <0) {//수락완료인데 기간지나면
+				dol.setDolbomStatus("종료: 리뷰 작성 전");
+				dolbomrepo.save(dol);
 			}
 
 			bolmap.put("no", dol.getDolbomNo());
@@ -446,6 +449,9 @@ public class DolbomService {
 				dolbomrepo.save(dol);
 			} else if (dol.getDolbomStatus().equals("대기중") && (eDate.getTime() - now.getTime()) < 0) {
 				dol.setDolbomStatus("기간마감");
+				dolbomrepo.save(dol);
+			}else if(dol.getDolbomStatus().equals("수락완료") && (eDate.getTime() - now.getTime()) <0) {//수락완료인데 기간지나면
+				dol.setDolbomStatus("종료: 리뷰 작성 전");
 				dolbomrepo.save(dol);
 			}
 
