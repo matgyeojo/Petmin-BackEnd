@@ -1,25 +1,17 @@
 package org.matgyeojo.dto;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,48 +26,29 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "DOLBOM")
+@Table(name = "SCHEDULE")
 @Entity
-public class Dolbom {
-
+public class Schedule {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto 인데 테이블별로 따로
-	private int dolbomNo;// 돌콤시퀀스
+	private int scheduleNo;// 돌콤시퀀스
 
-	//유저 아이디 fk
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	@JsonIgnore
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	Users user1;
+	
 	//펫시터 아이디 fk
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name="petsitter_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	Users user2;
+	Users user;
 	
-	//펫시퀀스
-	@ManyToOne
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
-	@JoinColumn(name = "pet_no")
-	PetProfile petProfile;
 	
-	@Column(nullable = false,unique =false )
-	private String START_CARE;// 예약 시작
 	@Column(nullable = false)
-	private String END_CARE;// 예약 끝나는 날짜
+	private String scheduleDay;// 펫시터 가능한 날
+	@Column(nullable = false)
+	private String scheduleHour;// 펫시터 가능한 시간
 	@Column(nullable = true)
-	private String dolbomStatus;// 대기중~
+	private int dolbomStatus;// 스케쥴 상태
 	@Column(nullable = true)
 	private String dolbomOption;// 돌봄 종류
-	@Column(nullable = true)
-	private String scheduleNo;//스케줄번호들
 	
-	
-	@OneToMany(mappedBy = "dolbom", fetch = FetchType.LAZY)
-	@JsonIgnore
-	private List<UserAssurance> userAssurance;
-
 }

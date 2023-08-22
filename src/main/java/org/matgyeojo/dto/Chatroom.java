@@ -2,7 +2,7 @@ package org.matgyeojo.dto;
 
 import java.util.List;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,9 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,29 +25,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = { "chats", "receiver", "sender" })
 @Entity
 @Table(name = "CHATROOM")
 public class Chatroom {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer chatroomNo; // 채팅방 시퀀스
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   private Long chatroomId; // 채팅방 번호
 
-//	// 연관관계 설정n:1
-//	// FK: 킬람이 board_bnofh 로 생성된다
-	@ManyToOne
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
-	@JoinColumn(name = "user1")
-	private Users user1;
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "sender_id")
+   private Users sender; // 보내는 사람
 
-	@ManyToOne
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
-	@JoinColumn(name = "user2")
-	private Users user2;
-	
-	
-	@OneToMany( mappedBy = "user")
-	private List<Preference> preference;
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "receiver_id")
+   private Users receiver; // 받는 사람
+
+   @OneToMany(mappedBy = "chatroom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @JsonIgnore
+   private List<Chat> chats;
 }

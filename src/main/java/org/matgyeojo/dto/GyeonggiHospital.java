@@ -34,7 +34,7 @@ public class GyeonggiHospital {
     @Column(name = "hospitalLongtitude")
     private Double REFINE_WGS84_LOGT; //병원 경도
     @Column(name = "hospitalAddress")
-    private String REFINE_ROADNM_ADDR; //병원 주소
+    private String REFINE_LOTNO_ADDR; //병원 주소
     @Column(name = "hospiralState")
     private String BSN_STATE_NM; //병원 상태
     @Column(name = "hospitalTel")

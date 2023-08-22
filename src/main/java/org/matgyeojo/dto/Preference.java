@@ -38,14 +38,14 @@ public class Preference {
 	// FK: 킬람이 board_bnofh 로 생성된다
 	@ManyToOne
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
+	//@JsonIgnore
 	@JoinColumn(name = "user_id")
 	private Users user;
 
 	@Column(nullable = false)
 	private String preference1; // 첫번째 선호
 	@Column(nullable = false)
-	private String preference2; // 두번째 선호
+	private int preference2; // 두번째 선호
 	@Column(nullable = false)
 	private String preference3; // 세번째 선호
 	@Column(nullable = false)
